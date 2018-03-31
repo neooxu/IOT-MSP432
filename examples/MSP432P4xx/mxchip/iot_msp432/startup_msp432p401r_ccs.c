@@ -82,6 +82,8 @@ static void faultISR3(void);
 static void defaultISR(void);
 
 extern void SysTick_Handler(void);
+extern void EUSCIA2_IRQHandler(void);
+
 /* External declaration for the reset handler that is to be called when the */
 /* processor is started                                                     */
 extern void _c_int00(void);
@@ -140,7 +142,7 @@ void (* const interruptVectors[])(void) =
     defaultISR,                             /* TA3_N ISR                 */
     defaultISR,                             /* EUSCIA0 ISR               */
     defaultISR,                             /* EUSCIA1 ISR               */
-    defaultISR,                             /* EUSCIA2 ISR               */
+	EUSCIA2_IRQHandler,                     /* EUSCIA2 ISR               */
     defaultISR,                             /* EUSCIA3 ISR               */
     defaultISR,                             /* EUSCIB0 ISR               */
     defaultISR,                             /* EUSCIB1 ISR               */
