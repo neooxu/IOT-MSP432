@@ -33,7 +33,14 @@
 #ifndef __COLOR_LED_H_
 #define __COLOR_LED_H_
 
-#include <compiler.h>
+//#include <compiler.h>
+/* DriverLib Includes */
+#include "driverlib.h"
+
+/* Standard Includes */
+#include <stdint.h>
+
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {

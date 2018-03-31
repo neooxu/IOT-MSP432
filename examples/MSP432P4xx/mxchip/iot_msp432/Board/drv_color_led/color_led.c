@@ -31,37 +31,72 @@
  */
 
 #include "color_led.h"
-
-#include <hpl_tcc_config.h>
-#include <hpl_tc_config.h>
-
-#include <hal_pwm.h>
  
 /*-------------------------------------------------- USER INTERFACES ------------------------------------------------*/
 
-extern struct pwm_descriptor PWM_B;
-extern struct pwm_descriptor PWM_R;
-extern struct pwm_descriptor PWM_G;
+/* Timer_A PWM Configuration Parameter */
+Timer_A_PWMConfig pwm_blue_Config =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,
+        32000,
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        32000
+};
 
+Timer_A_PWMConfig pwm_green_Config =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,
+        32000,
+        TIMER_A_CAPTURECOMPARE_REGISTER_3,
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        32000
+};
+
+Timer_A_PWMConfig pwm_red_Config =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,
+        32000,
+        TIMER_A_CAPTURECOMPARE_REGISTER_4,
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        32000
+};
+
+/*P2.4 blue,P2.6 green,P2.7 red*/
 void color_led_init( void )
 {
 	/* PWM pins configured in driver_init.c */
+    /* Configuring GPIO2.4,GPIO2.6,GPIO2.7 as peripheral output for PWM*/
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4 + GPIO_PIN6 + GPIO_PIN7,
+            GPIO_PRIMARY_MODULE_FUNCTION);
+    /* Configuring Timer_A to have a period of approximately 500ms and
+     * an initial duty cycle of 10% of that (3200 ticks)  */
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_blue_Config);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_green_Config);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_red_Config);
 }
 
 void color_led_open(uint8_t red, uint8_t green, uint8_t blue)
 {
-	/* 1M Hz PWM */
-	pwm_set_parameters(&PWM_R, CONF_TCC0_PER_REG, ((uint32_t)(((double)(double)CONF_TCC0_PER_REG * red) / 255)));
-	pwm_set_parameters(&PWM_G, CONF_TCC2_PER_REG, ((uint32_t)(((double)(double)CONF_TCC0_PER_REG * green) / 255)));
-	pwm_set_parameters(&PWM_B, CONF_TC0_CC0, ((CONF_TC0_CC0 * blue) / 255));
-	pwm_enable(&PWM_R);
-	pwm_enable(&PWM_G);
-	pwm_enable(&PWM_B);
+	pwm_blue_Config.dutyCycle = 32000 * blue / 255;
+	pwm_red_Config.dutyCycle = 32000 * red / 255;
+	pwm_green_Config.dutyCycle = 32000 * green / 255;
+
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_blue_Config);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_green_Config);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_red_Config);
 }
 
 void color_led_close(void)
 {
-	pwm_disable(&PWM_R);
-	pwm_disable(&PWM_G);
-	pwm_disable(&PWM_B);
+	pwm_blue_Config.dutyCycle = 0;
+	pwm_red_Config.dutyCycle = 0;
+	pwm_green_Config.dutyCycle = 0;
+
+	MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_blue_Config);
+	MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_green_Config);
+	MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_red_Config);
 }
