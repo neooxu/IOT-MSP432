@@ -76,9 +76,12 @@
 static void resetISR(void);
 static void nmiISR(void);
 static void faultISR(void);
+static void faultISR1(void);
+static void faultISR2(void);
+static void faultISR3(void);
 static void defaultISR(void);
 
-
+extern void SysTick_Handler(void);
 /* External declaration for the reset handler that is to be called when the */
 /* processor is started                                                     */
 extern void _c_int00(void);
@@ -107,18 +110,18 @@ void (* const interruptVectors[])(void) =
     resetISR,                               /* The reset handler         */
     nmiISR,                                 /* The NMI handler           */
     faultISR,                               /* The hard fault handler    */
-    defaultISR,                             /* The MPU fault handler     */
-    defaultISR,                             /* The bus fault handler     */
-    defaultISR,                             /* The usage fault handler   */
+    faultISR1,                             /* The MPU fault handler     */
+    faultISR2,                             /* The bus fault handler     */
+    faultISR3,                             /* The usage fault handler   */
     0,                                      /* Reserved                  */
     0,                                      /* Reserved                  */
     0,                                      /* Reserved                  */
     0,                                      /* Reserved                  */
     defaultISR,                             /* SVCall handler            */
-    defaultISR,                             /* Debug monitor handler     */
+    nmiISR,                             /* Debug monitor handler     */
     0,                                      /* Reserved                  */
     defaultISR,                             /* The PendSV handler        */
-    defaultISR,                             /* The SysTick handler       */
+    SysTick_Handler,                        /* The SysTick handler       */
     defaultISR,                             /* PSS ISR                   */
     defaultISR,                             /* CS ISR                    */
     defaultISR,                             /* PCM ISR                   */
@@ -241,6 +244,48 @@ static void faultISR(void)
 /* interrupt.  This simply enters an infinite loop, preserving the system state */
 /* for examination by a debugger.                                               */
 static void defaultISR(void)
+{
+    /* Fault trap exempt from ULP advisor */
+    #pragma diag_push
+    #pragma CHECK_ULP("-2.1")
+
+    /* Enter an infinite loop. */
+    while(1)
+    {
+    }
+
+    #pragma diag_pop
+}
+
+static void faultISR1(void)
+{
+    /* Fault trap exempt from ULP advisor */
+    #pragma diag_push
+    #pragma CHECK_ULP("-2.1")
+
+    /* Enter an infinite loop. */
+    while(1)
+    {
+    }
+
+    #pragma diag_pop
+}
+
+static void faultISR2(void)
+{
+    /* Fault trap exempt from ULP advisor */
+    #pragma diag_push
+    #pragma CHECK_ULP("-2.1")
+
+    /* Enter an infinite loop. */
+    while(1)
+    {
+    }
+
+    #pragma diag_pop
+}
+
+static void faultISR3(void)
 {
     /* Fault trap exempt from ULP advisor */
     #pragma diag_push
