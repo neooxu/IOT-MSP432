@@ -24,6 +24,6 @@ void drv_board_init(void)
 	OLED_Clear();
 	
 	/* Temperature and humidity sensor  */
-	//SHT2x_Init();
+	SHT2x_Init();
 
 }

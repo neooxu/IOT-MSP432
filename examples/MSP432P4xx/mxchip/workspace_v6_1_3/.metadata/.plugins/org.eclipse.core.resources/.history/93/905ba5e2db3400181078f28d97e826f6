@@ -1,0 +1,30 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CMD_SRCS += \
+../iot_msp432_ccs.cmd 
+
+LIB_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib 
+
+C_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c 
+
+C_DEPS += \
+./main.d 
+
+OBJS += \
+./main.obj 
+
+OBJS__QUOTED += \
+"main.obj" 
+
+C_DEPS__QUOTED += \
+"main.d" 
+
+C_SRCS__QUOTED += \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c" 
+
+

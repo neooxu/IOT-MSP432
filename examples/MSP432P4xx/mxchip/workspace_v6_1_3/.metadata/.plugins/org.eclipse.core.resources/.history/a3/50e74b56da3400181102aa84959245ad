@@ -1,0 +1,60 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CMD_SRCS += \
+../iot_msp432_ccs.cmd 
+
+LIB_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib 
+
+C_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_console.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_rgbled.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_sht20.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_switch.c \
+../iot_msp432.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c 
+
+C_DEPS += \
+./app_console.d \
+./app_rgbled.d \
+./app_sht20.d \
+./app_switch.d \
+./iot_msp432.d \
+./main.d 
+
+OBJS += \
+./app_console.obj \
+./app_rgbled.obj \
+./app_sht20.obj \
+./app_switch.obj \
+./iot_msp432.obj \
+./main.obj 
+
+OBJS__QUOTED += \
+"app_console.obj" \
+"app_rgbled.obj" \
+"app_sht20.obj" \
+"app_switch.obj" \
+"iot_msp432.obj" \
+"main.obj" 
+
+C_DEPS__QUOTED += \
+"app_console.d" \
+"app_rgbled.d" \
+"app_sht20.d" \
+"app_switch.d" \
+"iot_msp432.d" \
+"main.d" 
+
+C_SRCS__QUOTED += \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_console.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_rgbled.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_sht20.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_switch.c" \
+"../iot_msp432.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c" 
+
+

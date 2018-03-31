@@ -1,0 +1,62 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Each subdirectory must supply rules for building sources it contributes
+app_console.obj: /Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_console.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="app_console.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+app_rgbled.obj: /Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_rgbled.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="app_rgbled.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+app_sht20.obj: /Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_sht20.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="app_sht20.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+app_switch.obj: /Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_switch.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="app_switch.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+iot_msp432.obj: ../iot_msp432.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="iot_msp432.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+main.obj: /Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="main.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+startup_msp432p401r_ccs.obj: ../startup_msp432p401r_ccs.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="startup_msp432p401r_ccs.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+system_msp432p401r.obj: ../system_msp432p401r.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: MSP432 Compiler'
+	"/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="/Applications/ti/ccsv6/ccs_base/arm/include" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/" --include_path="/Applications/ti/ccsv6/ccs_base/arm/include/CMSIS" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_sht20" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/drv_VGM128064" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper" --include_path="/Users/snowyang/workspace_v6_1_3/iot_msp432/Board/helper/hal" --include_path="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/" --include_path="/Applications/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include" --advice:power=all -g --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="system_msp432p401r.d" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

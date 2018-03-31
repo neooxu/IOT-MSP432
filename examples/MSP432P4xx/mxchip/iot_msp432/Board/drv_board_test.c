@@ -61,20 +61,9 @@ void board_test(void)
 		MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
 		printf("[Time: %d] helloworld!\r\n", (int)mx_hal_ms_ticker_read());
 
-		temp += 1.2f;
-		humi += 1.2f;
-
 		/* Test SHT20 sensor */
-		//temp = SHT2x_GetTempPoll();
-		//humi = SHT2x_GetHumiPoll();
-		//sprintf(sensor_display[0], "Temp: %.2f C", SHT2x_GetTempPoll());
-		//sprintf(sensor_display[1], "humi: %.2f %%", SHT2x_GetHumiPoll());
-
-		printf("Temp: %.2f C\r\n", temp);
-		printf("Humi: %.2f %%\r\n", humi);
-		
-		snprintf(sensor_display[0], OLED_DISPLAY_MAX_CHAR_PER_ROW, "Temp: %.2f C", temp);
-		snprintf(sensor_display[1], OLED_DISPLAY_MAX_CHAR_PER_ROW,"humi: %.2f %%", humi);
+		sprintf(sensor_display[0], "Temp: %.2f C", SHT2x_GetTempPoll());
+		sprintf(sensor_display[1], "humi: %.2f %%", SHT2x_GetHumiPoll());
 		
 		OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_2, sensor_display[0]);
 		OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_3, sensor_display[1]);

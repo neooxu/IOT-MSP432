@@ -1,0 +1,24 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/Board/drv_sht20/sht2x.c 
+
+C_DEPS += \
+./Board/drv_sht20/sht2x.d 
+
+OBJS += \
+./Board/drv_sht20/sht2x.o 
+
+OBJS__QUOTED += \
+"Board/drv_sht20/sht2x.o" 
+
+C_DEPS__QUOTED += \
+"Board/drv_sht20/sht2x.d" 
+
+C_SRCS__QUOTED += \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/Board/drv_sht20/sht2x.c" 
+
+

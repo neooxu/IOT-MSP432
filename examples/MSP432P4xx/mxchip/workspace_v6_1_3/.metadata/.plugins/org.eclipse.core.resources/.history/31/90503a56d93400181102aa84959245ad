@@ -1,0 +1,57 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+LIB_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib 
+
+C_SRCS += \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_console.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_rgbled.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_sht20.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_switch.c \
+../iot_msp432.c \
+/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c 
+
+C_DEPS += \
+./app_console.d \
+./app_rgbled.d \
+./app_sht20.d \
+./app_switch.d \
+./iot_msp432.d \
+./main.d 
+
+OBJS += \
+./app_console.o \
+./app_rgbled.o \
+./app_sht20.o \
+./app_switch.o \
+./iot_msp432.o \
+./main.o 
+
+OBJS__QUOTED += \
+"app_console.o" \
+"app_rgbled.o" \
+"app_sht20.o" \
+"app_switch.o" \
+"iot_msp432.o" \
+"main.o" 
+
+C_DEPS__QUOTED += \
+"app_console.d" \
+"app_rgbled.d" \
+"app_sht20.d" \
+"app_switch.d" \
+"iot_msp432.d" \
+"main.d" 
+
+C_SRCS__QUOTED += \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_console.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_rgbled.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_sht20.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/app_switch.c" \
+"../iot_msp432.c" \
+"/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/mxchip/iot_msp432/main.c" 
+
+
