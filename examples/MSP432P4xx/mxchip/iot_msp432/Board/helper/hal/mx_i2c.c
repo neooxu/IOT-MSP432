@@ -45,10 +45,10 @@ void* mx_hal_i2c_init(void *config)
 
 #if 0
     /* Enable and clear the interrupt flag */
-    MAP_I2C_clearInterruptFlag(EUSCI_B0_BASE,
+    MAP_I2C_clearInterruptFlag(EUSCI_B1_BASE,
             EUSCI_B_I2C_TRANSMIT_INTERRUPT0 + EUSCI_B_I2C_RECEIVE_INTERRUPT0);
     //Enable master Receive interrupt
-    MAP_I2C_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_I2C_TRANSMIT_INTERRUPT0);
+    MAP_I2C_enableInterrupt(EUSCI_B1_BASE, EUSCI_B_I2C_TRANSMIT_INTERRUPT0);
     MAP_Interrupt_enableSleepOnIsrExit();
     MAP_Interrupt_enableInterrupt(INT_EUSCIB0);
 #endif
@@ -66,6 +66,8 @@ int32_t mx_hal_i2c_cmd_write(void *instance, uint16_t slave_addr, uint8_t reg, u
     UNUSED_PARAMETER(instance);
     mx_status err = kNoErr;
     bool ret;
+
+    while (MAP_I2C_masterIsStopSent(EUSCI_B1_BASE) == EUSCI_B_I2C_SENDING_STOP);
 
     /* Set Master in transmit mode */
     MAP_I2C_setMode(EUSCI_B1_BASE, EUSCI_B_I2C_TRANSMIT_MODE);
@@ -90,100 +92,46 @@ exit:
 	return err;
 }
 
-static bool I2C_masterReceiveSingleByteTimeout(uint32_t moduleInstance, uint8_t *rxData, uint32_t timeout)
-{
-    //Set USCI in Receive mode
-    BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->CTLW0,EUSCI_B_CTLW0_TR_OFS) = 0;
-
-    //Send start
-    EUSCI_B_CMSIS(moduleInstance)->CTLW0 |= (EUSCI_B_CTLW0_TXSTT + EUSCI_B_CTLW0_TXSTP);
-
-    //Poll for receive interrupt flag.
-    while (!BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG, EUSCI_B_IFG_RXIFG_OFS)
-           && --timeout)
-        ;
-
-        //Check if transfer timed out
-    if (timeout == 0)
-        return false;
-
-    //read single byte data.
-    *rxData = (EUSCI_B_CMSIS(moduleInstance)->RXBUF & EUSCI_B_RXBUF_RXBUF_MASK);
-    return true;
-}
-
 int32_t i2c_m_sync_cmd_read(void *instance, uint16_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t length)
 {
-    UNUSED_PARAMETER(instance);
-    mx_status err = kNoErr;
-    bool ret;
-    uint_fast16_t status;
-    uint32_t retry = 100;
-    printf("Send to %x\r\n", reg);
+    uint8_t i;
+    /* Specify slave address */
+    MAP_I2C_setSlaveAddress(EUSCI_B1_BASE, slave_addr);
 
     /* Set Master in transmit mode */
     MAP_I2C_setMode(EUSCI_B1_BASE, EUSCI_B_I2C_TRANSMIT_MODE);
 
-    /* Specify slave address */
-    MAP_I2C_setSlaveAddress(EUSCI_B1_BASE, slave_addr);
+    while (MAP_I2C_masterIsStopSent(EUSCI_B1_BASE) == EUSCI_B_I2C_SENDING_STOP);
 
-    ret = MAP_I2C_masterSendMultiByteStartWithTimeout(EUSCI_B1_BASE, reg, I2C_TIMEOUT);
-    require_action(ret, exit, err = kNotPreparedErr);
+    I2C_masterSendMultiByteStart(EUSCI_B1_BASE, reg);
+    I2C_masterSendMultiByteStart(EUSCI_B1_BASE, reg);
+    I2C_masterSendMultiByteStop(EUSCI_B1_BASE);
 
-
+    while (MAP_I2C_masterIsStopSent(EUSCI_B1_BASE) == EUSCI_B_I2C_SENDING_STOP);
+    /* Set Master in receive mode */
     MAP_I2C_setMode(EUSCI_B1_BASE, EUSCI_B_I2C_RECEIVE_MODE);
+    mx_hal_delay_ms(100);
 
-while(1);
-    mx_hal_delay_ms(50);
-
-
-    if (length == 1) {
-        while (--retry) {
-            ret = I2C_masterReceiveSingleByteTimeout(EUSCI_B1_BASE, buffer, I2C_TIMEOUT);
-            if (ret == true) {
-                goto exit;
-            }
+    for(;;)
+    {
+        while (MAP_I2C_masterIsStopSent(EUSCI_B1_BASE) == EUSCI_B_I2C_SENDING_STOP);
+        I2C_masterReceiveStart(EUSCI_B1_BASE);
+        while(I2C_masterIsStartSent(EUSCI_B1_BASE));
+        if(I2C_getInterruptStatus(EUSCI_B1_BASE, EUSCI_B_I2C_NAK_INTERRUPT))
+        {
+            I2C_clearInterruptFlag(EUSCI_B1_BASE, EUSCI_B_I2C_NAK_INTERRUPT);
+            I2C_masterReceiveMultiByteStop(EUSCI_B1_BASE);
+            while(I2C_masterIsStopSent(EUSCI_B1_BASE));
             mx_hal_delay_ms(10);
         }
-        require_action(retry > 0, exit, err = kTimeoutErr);
-    }
-    else {
-        
-MAP_I2C_masterReceiveStart(EUSCI_B1_BASE);
-mx_hal_delay_ms(500);
- while( !(EUSCI_B_I2C_RECEIVE_INTERRUPT0 & MAP_I2C_getEnabledInterruptStatus(EUSCI_B1_BASE)));
-        //while (--retry) {
-
-          //  MAP_I2C_masterReceiveStart(EUSCI_B1_BASE);
-            //mx_hal_delay_ms(50);
-            // status = MAP_I2C_getEnabledInterruptStatus(EUSCI_B1_BASE);
-
-            // if ( status & EUSCI_B_I2C_RECEIVE_INTERRUPT0 ) {
-            //     break;
-            // }
-            // mx_hal_delay_ms(10);
-        //}
-
-        require_action(retry > 0, exit, err = kTimeoutErr);
-
-        while (length--){
-            printf("receive, %d\r\n", retry);
-            if (length == 1) {
-                MAP_I2C_masterReceiveMultiByteStop(EUSCI_B1_BASE);
+        else
+        {
+            for(i=0; i<length-1; i++)
+            {
+                buffer[i] = I2C_masterReceiveSingle(EUSCI_B1_BASE);
             }
-            
-            *buffer++ = MAP_I2C_masterReceiveMultiByteNext(EUSCI_B1_BASE);
-            mx_hal_delay_ms(5);
-
-            // if (length) {
-            //     /* Wait for the next byte ready*/
-            //     while( !(EUSCI_B_I2C_RECEIVE_INTERRUPT0 & MAP_I2C_getEnabledInterruptStatus(EUSCI_B1_BASE)));
-            // }
-
-            
+            buffer[i] = I2C_masterReceiveMultiByteFinish(EUSCI_B1_BASE);
+            break;
         }
     }
-exit:
-    if (err != kNoErr)   MAP_I2C_masterSendMultiByteStopWithTimeout(EUSCI_B1_BASE, I2C_TIMEOUT);
-    return err;
 }

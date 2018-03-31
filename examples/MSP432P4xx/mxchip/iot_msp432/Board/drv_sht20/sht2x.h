@@ -7,7 +7,7 @@
 #endif
 
 #define  I2C_ADDR_W 0x40
-#define  I2C_ADDR_R 0x81
+#define  I2C_ADDR_R 0x40
 
 typedef enum {
     TRIG_TEMP_MEASUREMENT_HM   = 0xE3,

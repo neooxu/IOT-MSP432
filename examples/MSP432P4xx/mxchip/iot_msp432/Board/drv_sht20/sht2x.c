@@ -24,7 +24,7 @@ int ht20_i2c_bus_read(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
 {
 	int ret = 0;
 
-	ret = i2c_m_sync_cmd_read(i2c, I2C_ADDR_W, reg_addr, reg_data, cnt);
+	ret = i2c_m_sync_cmd_read(i2c, I2C_ADDR_R, reg_addr, reg_data, cnt);
 	require_noerr(ret, exit);
 
 exit:	
