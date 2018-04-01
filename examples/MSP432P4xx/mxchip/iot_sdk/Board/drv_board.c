@@ -14,11 +14,10 @@ void drv_board_init(void)
 	/* Stdio printf */
 	mx_hal_stdio_init();
 
-#if 0
 	/* RGB color led initialize */
 	color_led_init();
 	color_led_open(0, 0, 0);
-#endif
+
 	/* init OLED */
 	OLED_Init();
 	OLED_Clear();

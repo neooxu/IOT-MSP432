@@ -44,10 +44,7 @@ void usr_long_pressed_handler(void)
 int main(void)
 {
 	mx_status err = kNoErr;
-	
-	//board_test();
-	// ATCmdParser_test();
-#if 1
+
 	drv_board_init();
 
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "Microchip");
@@ -58,7 +55,7 @@ int main(void)
 
 	rgbled_task_init();
 	SHT20_task_init();
-	// switch_task_init();
+	switch_task_init();
 	console_task_init();
 	
 	// button_init(&usr_btn);
@@ -68,12 +65,11 @@ int main(void)
 		/* Application tick */
 		alisds_loop();
 		SHT20_task();
-		// switch_task();
+		switch_task();
 		// button_srv(&usr_btn);
 	}
 	
 exit:
 	app_log("App exit reason %d", err);
 	while(1);
-#endif
 }
