@@ -7,11 +7,11 @@
 #include "mx_common.h"
 
 #include "oled.h"
-//#include "color_led.h"
-//#include "hsb_led.h"
+#include "color_led.h"
+#include "hsb_led.h"
 #include "sht2x.h"
-//#include "io_button.h"
-//#include "hsb_led.h"
+#include "io_button.h"
+#include "hsb_led.h"
 #include "mx_hal.h"
 
 #ifdef __cplusplus

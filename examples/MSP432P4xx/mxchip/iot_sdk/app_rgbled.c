@@ -13,6 +13,7 @@ static bool  light_on = true;
 mx_status rgbled_task_init(void)
 {
 	ali_dev_attr_t attr;
+	hsb2rgb_led_init();
 	hsb2rgb_led_open(hue, saturation, bright);
 
 	attr.name = "Saturation";

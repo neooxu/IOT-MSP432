@@ -12,18 +12,18 @@
 
 const emh_ali_config_t ali_config =
 {
-	.product_info = {
-		.name			= "microchip-002",
-		.modle			= "MICROCHIP_LIVING_AIRBOX_MICROCHIP_002",
-		.key			= "Dkqt9OjYC0u0DIWGajKP",
-		.secret			= "ciubDzkEOKVi0WS2VZzqAGGIgdmW1dsSatitz6Ie",
-		.format			= EMH_ARG_ALI_FORMAT_JSON,
-	},
-	.dev_info = {
-		.type			= "AIRBOX",
-		.category		= "LIVING",
-		.manufacture	= "MICROCHIP",
-	}
+		.product_info = {
+		    .name      = "tideveloper-001",
+		    .modle      = "TI_LIVING_AIRBOX_TIDEVELOPER_001",
+		    .key      = "0sB7jw6J4NA0HJGJfwrj",
+		    .secret      = "r2jU6xdI8Itq7LqBzXI3HMvSPG8pJo35bXb1mcF9",
+		    .format      = EMH_ARG_ALI_FORMAT_JSON,
+		  },
+		  .dev_info = {
+		    .type      = "AIRBOX",
+		    .category    = "LIVING",
+		    .manufacture  = "TI",
+		  }
 };
 
 //BBED
@@ -445,7 +445,7 @@ void alisds_provision(void)
 
 void alisds_restore(void)
 {
-	if (context.device_state == eState_M2_provision) {
+	if (context.device_state == eState_M2_provision || context.device_state == eState_M3_normal) {
 		emh_ali_unbound();
 	}
 	

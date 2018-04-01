@@ -4,26 +4,40 @@
 
 #include "drv_board.h"
 #include "main.h"
-#if 0
+/* DriverLib Includes */
+#include "driverlib.h"
+#include "io_button.h"
+
 
 void usr_btn_isr(void);
 void usr_clicked_handler(void);
 void usr_long_pressed_handler(void);
+void PORT4_IRQHandler(void);
 
 btn_instance_t usr_btn =
 {
-	.port                   = GPIO_PORTA,
-	.pin                    = PIN_PA02,
-	.io_irq                 = usr_btn_isr,
+	.port                   = GPIO_PORT_P4,
+	.pin                    = GPIO_PIN6,
+	.io_irq                 = PORT4_IRQHandler,
 	.idle			        = IOBUTTON_IDLE_STATE_HIGH,
 	.long_pressed_timeout   = 5000,
 	.pressed_func           = usr_clicked_handler,
 	.long_pressed_func		= usr_long_pressed_handler,
 };
 
-void usr_btn_isr(void)
+void PORT4_IRQHandler(void)
 {
-	button_irq_handler(&usr_btn);
+    uint32_t status;
+
+    status = MAP_GPIO_getInterruptStatus(GPIO_PORT_P4,0xFFFF);
+    MAP_GPIO_clearInterruptFlag(GPIO_PORT_P4, status);
+
+    /* Toggling the output on the LED */
+    if(status & GPIO_PIN6)
+    {
+    		button_irq_handler(&usr_btn);
+    }
+
 }
 
 void usr_clicked_handler(void)
@@ -39,7 +53,6 @@ void usr_long_pressed_handler(void)
 	
 	alisds_restore();
 }
-#endif
 
 int main(void)
 {
@@ -47,7 +60,7 @@ int main(void)
 
 	drv_board_init();
 
-	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "Microchip");
+	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "TI University");
 
 	err = alisds_init(ALI_HANDLE_MAX);
 	require_noerr(err, exit);
@@ -58,15 +71,15 @@ int main(void)
 	switch_task_init();
 	console_task_init();
 	
-	// button_init(&usr_btn);
-	
+	button_init(&usr_btn);
+
 	while(1)
 	{
 		/* Application tick */
 		alisds_loop();
 		SHT20_task();
 		switch_task();
-		// button_srv(&usr_btn);
+		button_srv(&usr_btn);
 	}
 	
 exit:

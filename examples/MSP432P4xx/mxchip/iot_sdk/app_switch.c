@@ -17,8 +17,8 @@ mx_status switch_task_init(void)
 
 	MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5, GPIO_PIN4);
 	MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5, GPIO_PIN5);
-	switch_1 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4);
-	switch_2 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5);
+	switch_2 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4);
+	switch_1 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5);
 	
 	attr.name = "switch1";
 	attr.att_type = ALI_ATT_TYPE_BOOL;
@@ -37,13 +37,13 @@ mx_status switch_task_init(void)
 
 void switch_task(void)
 {
-	if (switch_1 != GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4)) {
-		switch_1 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4);
+	if (switch_2 != GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4)) {
+		switch_2 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4);
 		alisds_attr_indicate_by_handle(ALI_HANDLE_IO_SWITCH_1);
 	}
 
-	if (switch_2 != GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5)) {
-		switch_2 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5);
+	if (switch_1 != GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5)) {
+		switch_1 = GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5);
 		alisds_attr_indicate_by_handle(ALI_HANDLE_IO_SWITCH_2);
 	}
 }
