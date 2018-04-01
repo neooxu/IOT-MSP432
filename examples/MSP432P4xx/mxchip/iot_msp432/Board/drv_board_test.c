@@ -10,7 +10,9 @@ static int32_t usart_async_read(uint8_t *const buf, const uint16_t length);
 
 
 const char TEST_AT_CMD[] = "AT+FWVER?\r";
-uint8_t TEST_AT_CMD_RETURN[100];
+uint8_t TEST_AT_CMD_RETURN[50];
+void EUSCIA2_IRQHandler(void);
+
 #if 0
 
 static void rx_cb_USART_AT(const struct usart_async_descriptor *const io_descr)
@@ -73,7 +75,7 @@ void board_test(void)
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "IOT-MSP43x");
 	MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
 
-	ringbuffer_init(&rx, rx_buffer, 1024);
+	ringbuffer_init(&rx, rx_buffer, 50);
 
 
     /* Selecting P3.2 and P3.3 in UART mode */
@@ -88,7 +90,7 @@ void board_test(void)
 
     /* Enabling UART interrupts */
     MAP_UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
-    MAP_Interrupt_enableInterrupt(EUSCI_A2_BASE);
+    MAP_UART_registerInterrupt(EUSCI_A2_BASE, EUSCIA2_IRQHandler);
 
 	/* Replace with your application code */
 	while (1) {
@@ -113,14 +115,14 @@ void board_test(void)
 		
 		/* Test Wi-Fi module */
 		for (i = 0; i < strlen(TEST_AT_CMD); i++) {
-			while ( !(EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG & UART_getInterruptStatus(EUSCI_A2_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)));
+			while ( !(EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG & MAP_UART_getInterruptStatus(EUSCI_A2_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)));
 			MAP_UART_transmitData(EUSCI_A2_BASE, TEST_AT_CMD[i]);
 		}
 
 
 		//io_write(io, (uint8_t *)TEST_AT_CMD, strlen(TEST_AT_CMD));
 		
-		n = at_read_result(TEST_AT_CMD_RETURN, 100, 500);
+		n = at_read_result(TEST_AT_CMD_RETURN, 100, 100);
 		TEST_AT_CMD_RETURN[n]=0x0;
 		printf("[Time: %d] %s\r\n", (int)mx_hal_ms_ticker_read(), TEST_AT_CMD_RETURN);
 
