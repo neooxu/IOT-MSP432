@@ -58,7 +58,8 @@ const char* emh_arg_for_type(const char* emh_arg[], uint8_t type)
 
 uint8_t emh_arg_for_arg(const  char* emh_arg[], char *arg)
 {
-	for (uint8_t i = 0; i < EMH_ARG_ERR; i++) {
+	uint8_t i;
+	for (i = 0; i < EMH_ARG_ERR; i++) {
 		if (*emh_arg[i] == 0x0) break;
 		if (memcmp(emh_arg[i], arg, strlen(emh_arg[i])) == 0) {
 			return i;

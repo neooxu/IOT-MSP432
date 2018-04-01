@@ -4,11 +4,38 @@
 
 #include "mx_common.h"
 #include "mx_debug.h"
+#include "mx_toolchain.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+/**
+ * \brief Type for the register holding global interrupt enable flag
+ */
+typedef uint32_t hal_atomic_t;
+
+__attribute__( ( always_inline ) ) static inline void __DMB(void)
+{
+	__asm("  dmb");
+}
+
+#define CRITICAL_SECTION_ENTER()                                                                                       \
+	{                                                                                                                  \
+		volatile hal_atomic_t __atomic;                                                                                \
+		atomic_enter_critical(&__atomic);
+
+
+#define CRITICAL_SECTION_LEAVE()                                                                                       \
+	atomic_leave_critical(&__atomic);                                                                                  \
+	}
+
+
+void atomic_enter_critical(hal_atomic_t volatile *atomic);
+void atomic_leave_critical(hal_atomic_t volatile *atomic);
+
+
 
 void mx_hal_ms_ticker_init(void);
 
@@ -30,6 +57,9 @@ void mx_hal_stdio_init(void);
 void* mx_hal_i2c_init(void *config);
 int mx_hal_i2c_cmd_write(void *instance, uint16_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t length);
 int32_t i2c_m_sync_cmd_read(void *instance, uint16_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t length);
+
+
+
 
 #ifdef __cplusplus
 } /* extern "C" */

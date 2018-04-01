@@ -45,8 +45,8 @@ int main(void)
 {
 	mx_status err = kNoErr;
 	
-	board_test();
-	//ATCmdParser_test();
+	//board_test();
+	ATCmdParser_test();
 #if 0
 	drv_board_init();
 

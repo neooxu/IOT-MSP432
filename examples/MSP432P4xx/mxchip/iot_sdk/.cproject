@@ -95,7 +95,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Board/helper/jsmn|Board/helper/hal/mx_serial.c|Board/helper/emhost|Board/drv_color_led|Board/drv_button|Board/AliCloud_SDS|app_switch.c|app_sht20.c|app_rgbled.c|app_console.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Board/drv_color_led|Board/drv_button|Board/AliCloud_SDS|app_switch.c|app_sht20.c|app_rgbled.c|app_console.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
