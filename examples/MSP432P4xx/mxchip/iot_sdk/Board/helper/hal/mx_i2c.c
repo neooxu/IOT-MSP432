@@ -134,4 +134,6 @@ int32_t i2c_m_sync_cmd_read(void *instance, uint16_t slave_addr, uint8_t reg, ui
             break;
         }
     }
+
+    return 0;
 }

@@ -1,6 +1,3 @@
-
-#include <atmel_start.h>
-
 #include "mx_debug.h"
 #include "emh_api.h"
 #include "alicloud_sds.h"

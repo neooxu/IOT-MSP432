@@ -13,4 +13,6 @@
 	<templateProperties value="id=iot_sdk.projectspec.iot_sdk,"/>
 	<origin value="/Users/snowyang/workspace/MSP432_DriverLib_3_10_00_09/examples/MSP432P4xx/gpio/iot_sdk/ccs/iot_sdk.projectspec"/>
 	<filesToOpen value="iot_sdk.c,"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<isTargetManual value="false"/>
 </projectOptions>

@@ -1,6 +1,10 @@
 eclipse.preferences.version=1
+encoding//Debug/Board/AliCloud_SDS/subdir_rules.mk=UTF-8
+encoding//Debug/Board/AliCloud_SDS/subdir_vars.mk=UTF-8
 encoding//Debug/Board/drv_VGM128064/subdir_rules.mk=UTF-8
 encoding//Debug/Board/drv_VGM128064/subdir_vars.mk=UTF-8
+encoding//Debug/Board/drv_color_led/subdir_rules.mk=UTF-8
+encoding//Debug/Board/drv_color_led/subdir_vars.mk=UTF-8
 encoding//Debug/Board/drv_sht20/subdir_rules.mk=UTF-8
 encoding//Debug/Board/drv_sht20/subdir_vars.mk=UTF-8
 encoding//Debug/Board/helper/emhost/ATCmdParser/subdir_rules.mk=UTF-8
