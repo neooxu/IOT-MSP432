@@ -1,30 +1,50 @@
-#include <hal_usart_async.h>
-#include <utils.h>
-
 #include "mx_hal.h"
+#include "driverlib.h"
 
-extern struct usart_async_descriptor USART_AT;
-static struct io_descriptor *io_at;
-static volatile bool tx_complete = true;
+#include "mx_utils/mx_ringbuffer.h"
+
+#define ATCOMMAND_RX_BUF_SIZE 1024
+
 static int _timeout = 100;
 
-static void rx_cb_USART_AT(const struct usart_async_descriptor *const io_descr)
+const eUSCI_UART_Config at_uartConfig =
 {
-	/* Driver will store the received data to its buffer */
-}
+        EUSCI_A_UART_CLOCKSOURCE_SMCLK,          // SMCLK Clock Source
+        6,                                       // BRDIV = 6
+        8,                                       // UCxBRF = 8
+        32,                                      // UCxBRS = 32
+        EUSCI_A_UART_NO_PARITY,                  // No Parity
+        EUSCI_A_UART_LSB_FIRST,                  // LSB First
+        EUSCI_A_UART_ONE_STOP_BIT,               // One stop bit
+        EUSCI_A_UART_MODE,                       // UART mode
+        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION  // Oversampling
+};
+uint8_t at_buffer[ATCOMMAND_RX_BUF_SIZE];
+struct ringbuffer at_rx;
+void ATCMD_RX_ISR(void);
 
-static void tx_cb_USART_AT(const struct usart_async_descriptor *const io_descr)
-{
-	tx_complete = true;
-}
+static int32_t at_async_read(uint8_t *const buf, const uint16_t length);
+
 
 void mx_hal_serial_init(int timeout)
 {
 	_timeout = timeout;
-	usart_async_register_callback(&USART_AT, USART_ASYNC_RXC_CB, rx_cb_USART_AT);
-	usart_async_register_callback(&USART_AT, USART_ASYNC_TXC_CB, tx_cb_USART_AT);
-	usart_async_get_io_descriptor(&USART_AT, &io_at);
-	usart_async_enable(&USART_AT);
+
+	ringbuffer_init(&at_rx, at_buffer, ATCOMMAND_RX_BUF_SIZE);
+
+	/* Selecting P3.2 and P3.3 in UART mode */
+	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3,
+	            GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
+
+	/* Configuring UART Module */
+	MAP_UART_initModule(EUSCI_A2_BASE, &at_uartConfig);
+
+	/* Enable UART module */
+	MAP_UART_enableModule(EUSCI_A2_BASE);
+
+	/* Enabling UART interrupts */
+	MAP_UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
+	MAP_UART_registerInterrupt(EUSCI_A2_BASE, ATCMD_RX_ISR);
 }
 
 void mx_hal_serial_set_timeout(int timeout)
@@ -32,14 +52,18 @@ void mx_hal_serial_set_timeout(int timeout)
 	_timeout = timeout;	
 }
 
+
+
+
+
 int mx_hal_serial_putc(char c)
 {
 	uint32_t current = mx_hal_ms_ticker_read();
 	
 	do {
-		if(tx_complete) {
-			tx_complete = false;
-			return io_write(io_at, (uint8_t *)&c, 1) == 1 ? 0 : -1;
+		if ( EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG & MAP_UART_getInterruptStatus(EUSCI_A2_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)) {
+			MAP_UART_transmitData(EUSCI_A2_BASE, c);
+			return 0;
 		}
 	} while((mx_hal_ms_ticker_read() - current) < _timeout);
 
@@ -52,7 +76,7 @@ int mx_hal_serial_getc(void)
 	uint8_t ch;
 	
 	do {
-		if (io_read(io_at, &ch, 1) == 1) return ch;
+		if (at_async_read(&ch, 1) == 1) return ch;
 	} while((mx_hal_ms_ticker_read() - current) < _timeout);
 	
 	return -1;
@@ -60,8 +84,7 @@ int mx_hal_serial_getc(void)
 
 bool mx_hal_serial_readable(void)
 {
-	struct usart_async_descriptor *descr = CONTAINER_OF(io_at, struct usart_async_descriptor, io);
-	if(ringbuffer_num(&descr->rx)) return true;
+	if(ringbuffer_num(&at_rx)) return true;
 	return false;
 }
 
@@ -70,11 +93,49 @@ void mx_hal_serial_flush(void)
 {
 	uint32_t                       num;
 	uint8_t                        tmp;
-	struct usart_async_descriptor *descr = CONTAINER_OF(io_at, struct usart_async_descriptor, io);
 	
 	CRITICAL_SECTION_ENTER()
-	for(num = ringbuffer_num(&descr->rx); num>0; num--) {
-		ringbuffer_get(&descr->rx, &tmp);
+	for(num = ringbuffer_num(&at_rx); num>0; num--) {
+		ringbuffer_get(&at_rx, &tmp);
 	}
 	CRITICAL_SECTION_LEAVE()
 }
+
+/////////// Hardware spec functions //////////////
+
+void ATCMD_RX_ISR(void)
+{
+	uint32_t status = MAP_UART_getEnabledInterruptStatus(EUSCI_A2_BASE);
+
+	uint8_t RXData;
+
+	MAP_UART_clearInterruptFlag(EUSCI_A2_BASE, status);
+
+	if(status & EUSCI_A_UART_RECEIVE_INTERRUPT)
+	{
+		RXData = MAP_UART_receiveData(EUSCI_A2_BASE);
+		ringbuffer_put(&at_rx, RXData);
+	}
+}
+
+
+static int32_t at_async_read(uint8_t *const buf, const uint16_t length)
+{
+	uint16_t                       was_read = 0;
+	uint32_t                       num;
+
+	if (buf == 0 || length == 0) return 0;
+
+	CRITICAL_SECTION_ENTER()
+	num = ringbuffer_num(&at_rx);
+	CRITICAL_SECTION_LEAVE()
+
+	while ((was_read < num) && (was_read < length)) {
+		ringbuffer_get(&at_rx, &buf[was_read++]);
+	}
+
+	return (int32_t)was_read;
+}
+
+
+
