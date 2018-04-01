@@ -415,11 +415,11 @@ void alisds_provision(void)
 	char provision_ack[50];
 	
 	if (context.cloud_state == EMH_ARG_ALI_CONN_CONNECTED) {
-		snprintf(provision_ack, 50, "{\"prov\":{\"value\":\"%d\"}}", 0);
+		snprintf(provision_ack, 50, "{\"ErrorCode\":{\"value\":\"%d\"}}", 0);
 		err = emh_ali_set_cloud_atts(EMH_ARG_ALI_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
 		require_noerr(err, exit);
 		
-		snprintf(provision_ack, 50, "{\"prov\":{\"value\":\"%d\"}}", 1);
+		snprintf(provision_ack, 50, "{\"ErrorCode\":{\"value\":\"%d\"}}", 1);
 		err = emh_ali_set_cloud_atts(EMH_ARG_ALI_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
 		require_noerr(err, exit);
 		
@@ -455,3 +455,5 @@ void alisds_restore(void)
 	emh_module_restore_settings();
 	context.device_state = eState_M1_initialize;
 }
+
+
