@@ -29,14 +29,10 @@
  *
  ******************************************************************************
  */
+#include <math.h>
 
 #include "mx_common.h"
-#include "mx_debug.h"
 #include "color_led.h"
-#include "hsb_led.h"
-
-#define hsb2rgb_led_log(M, ...) custom_log("HSB2RGB_LED", M, ##__VA_ARGS__)
-#define hsb2rgb_led_log_trace() custom_log_trace("HSB2RGB_LED")
 
 #define H2R_MAX_RGB_val 255.0f
 
@@ -120,36 +116,10 @@ static void H2R_HSBtoRGB(float hue, float sat, float bright, float *color) {
   //  color[2] = Percent(color[2]);
 }
 
-/*----------------------------------------------------- INTERNAL FUNCTION  ---------------------------------------*/
-
-// call RGB LED driver to control LED
-static void OpenLED_RGB(float *color)
-{
-  uint8_t blue = (uint8_t)(color[2]);
-  uint8_t green = (uint8_t)(color[1]);
-  uint8_t red = (uint8_t)(color[0]);
-
-  color_led_init();
-  color_led_open(red, green, blue);
-}
-
-static void CloseLED_RGB()
-{
-    color_led_init();
-	color_led_close();
-}
-
-
 /*----------------------------------------------------- USER INTERFACES ---------------------------------------*/
 
-#include <math.h>
 
-void hsb2rgb_led_init( void )
-{
-    color_led_init();
-}
-
-void hsb2rgb_led_open(float hues, float saturation, float brightness)
+void color_led_open_hsb(float hues, float saturation, float brightness)
 {
 	float color[3] = {0};
 		
@@ -158,10 +128,7 @@ void hsb2rgb_led_open(float hues, float saturation, float brightness)
 	brightness = brightness*pow(brightness/100.0, 2);
 
 	H2R_HSBtoRGB(hues, saturation, brightness, color);
-	OpenLED_RGB(color);
-}
 
-void hsb2rgb_led_close(void)
-{
-  CloseLED_RGB();
+	color_led_init();
+	color_led_open_rgb((uint8_t)(color[0]), (uint8_t)(color[1]), (uint8_t)(color[2]));
 }

@@ -29,6 +29,12 @@
  *
  ******************************************************************************
  */
+#include "driverlib.h"
+
+/* Standard Includes */
+#include <stdint.h>
+
+#include <stdbool.h>
 
 #include "color_led.h"
  
@@ -79,7 +85,7 @@ void color_led_init( void )
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_red_Config);
 }
 
-void color_led_open(uint8_t red, uint8_t green, uint8_t blue)
+void color_led_open_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
 	pwm_blue_Config.dutyCycle = 32000 * blue / 255;
 	pwm_red_Config.dutyCycle = 32000 * red / 255;

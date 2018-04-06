@@ -36,8 +36,6 @@
 #include "oled.h"
 #include "oledfont.h"  	 
 
-static uint8_t _oled_avalid = 0;
-
 /* SSD1106 I2C bus driver*/
 int ssd1106_i2c_bus_init(void);
 void ssd1106_delay_ms(uint16_t nms);
@@ -110,7 +108,7 @@ void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr)
   unsigned char c=0;	
   c=chr-' ';
   if(x>Max_Column-1){x=0;y=y+2;}
-  if(SIZE ==16)
+  if(CHAR_SIZE == 16)
   {
     OLED_Set_Pos(x,y);	
     OLED_WR_Bytes( (uint8_t *)&F8X16[c*16], 8, OLED_DATA );
@@ -151,7 +149,7 @@ void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size)
   }
 } 
 
-void OLED_ShowString(uint8_t x,uint8_t y,char *chr)
+void OLED_ShowString(uint8_t x,uint8_t y, const char *chr)
 {
   unsigned char j=0;
   uint8_t x_t = x,y_t = y;
@@ -231,9 +229,7 @@ void OLED_Init(void)
       printf( "OLED_ERROR: I2C port init err." );
       return;
   }
-  
-  _oled_avalid = 1;
-  
+
   OLED_WR_Byte(0xAE,OLED_CMD);//--turn off oled panel
   OLED_WR_Byte(0x00,OLED_CMD);//---set low column address
   OLED_WR_Byte(0x10,OLED_CMD);//---set high column address
@@ -309,3 +305,6 @@ int ssd1106_i2c_bus_write(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
 	if( ret ) printf("ssd1106_i2c_bus_write err\r\n");
 	return ret;
 }
+
+
+

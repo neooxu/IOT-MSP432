@@ -11,12 +11,11 @@ extern void emh_wlan_event_handler(void);
 
 mx_status emh_module_reset(void)
 {
-	int i;
 	if (!(ATCmdParser_send("AT+REBOOT")
 	&&  ATCmdParser_recv("OK\r\n"))) {
 		return kGeneralErr;
 	}
-	for (i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) {
 		if (ATCmdParser_send("AT")
 		&&  ATCmdParser_recv("OK\r\n")
 		&&  ATCmdParser_send("AT+UARTE=OFF")
@@ -29,13 +28,12 @@ mx_status emh_module_reset(void)
 
 mx_status emh_module_restore_settings(void)
 {
-	int i;
 	if (!(ATCmdParser_send("AT+FACTORY")
 	&&  ATCmdParser_recv("OK\r\n"))) {
 		return kGeneralErr;
 	}
 	
-	for (i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) {
 		if (ATCmdParser_send("AT")
 		&&  ATCmdParser_recv("OK\r\n")
 		&&  ATCmdParser_send("AT+UARTE=OFF")
@@ -49,10 +47,9 @@ mx_status emh_module_restore_settings(void)
 
 mx_status emh_module_init(void)
 {
-	int i;
 	ATCmdParser_init("\r","\r\n", 1000, false);
 		
-	for (i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		if ( kNoErr == emh_module_reset()) {
 			ATCmdParser_add_oob("+ALINKEVENT:",	emh_ali_event_handler);
 			ATCmdParser_add_oob("+WEVENT:",		emh_wlan_event_handler);

@@ -13,8 +13,8 @@ static bool  light_on = true;
 mx_status rgbled_task_init(void)
 {
 	ali_dev_attr_t attr;
-	hsb2rgb_led_init();
-	hsb2rgb_led_open(hue, saturation, bright);
+	color_led_init();
+	color_led_open_hsb(hue, saturation, bright);
 
 	attr.name = "Saturation";
 	attr.att_type = ALI_ATT_TYPE_INT;
@@ -49,7 +49,7 @@ mx_status handle_write_cur_saturation	(ali_att_val value)
 {
 	saturation = (float)value.intValue;
 	if (light_on == true) {
-		hsb2rgb_led_open(hue, saturation, bright);
+		color_led_open_hsb(hue, saturation, bright);
 	}
 	return kNoErr;
 }
@@ -57,7 +57,7 @@ mx_status handle_write_cur_bright		(ali_att_val value)
 {
 	bright = (float)value.intValue;
 	if (light_on == true) {
-		hsb2rgb_led_open(hue, saturation, bright);
+		color_led_open_hsb(hue, saturation, bright);
 	}
 	return kNoErr;
 }
@@ -67,7 +67,7 @@ mx_status handle_write_cur_hue			(ali_att_val value)
 	hue = (float)value.intValue;
 	if (light_on == true) {
 		app_log("Light: %.2f, %.2f, %.2f", hue, saturation, bright);
-		hsb2rgb_led_open(hue, saturation, bright);
+		color_led_open_hsb(hue, saturation, bright);
 	}
 	return kNoErr;
 }
@@ -76,10 +76,10 @@ mx_status handle_write_cur_light_switch(ali_att_val value)
 {
 	light_on = value.boolValue;
 	if (light_on == true) {
-		hsb2rgb_led_open(hue, saturation, bright);
+		color_led_open_hsb(hue, saturation, bright);
 	}
 	else {
-		hsb2rgb_led_close();
+		color_led_close();
 	}
 	return kNoErr;
 }

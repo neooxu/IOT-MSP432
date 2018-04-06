@@ -36,7 +36,6 @@ static inline void debug_if(int condition, const char *format, ...) {
 
 bool ATCmdParser_vrecv(const char *response, va_list args)
 {
-	int k;
 	char _in_prev = 0;  
 	bool _aborted;   
 restart:
@@ -138,7 +137,7 @@ restart:
 			// We only succeed if all characters in the response are matched
 			if (count == j) {
 				/* Remove dummy chars*/
-				for (k = 0; k < dummy; k++, j-- ) {
+				for (int k = 0; k < dummy; k++, j-- ) {
 					dummy_pos[k] -= k;
 					memcpy(_buffer+offset+dummy_pos[k], _buffer+offset+dummy_pos[k]+1, j-dummy_pos[k]-1);
 					debug_if(_dbg_on, "AT= %s\n", _buffer+offset);
@@ -173,21 +172,20 @@ restart:
 // Command parsing with line handling
 bool ATCmdParser_vsend(const char *command, va_list args)
 {
-	int i;
 	while (ATCmdParser_process_oob());
 	// Create and send command
 	if (vsprintf(_buffer, command, args) < 0) {
 		return false;
 	}
 
-	for (i = 0; _buffer[i]; i++) {
+	for (int i = 0; _buffer[i]; i++) {
 		if (mx_hal_serial_putc(_buffer[i]) < 0) {
 			return false;
 		}
 	}
 
 	// Finish with newline
-	for (i = 0; _output_delimiter[i]; i++) {
+	for (size_t i = 0; _output_delimiter[i]; i++) {
 		if (mx_hal_serial_putc(_output_delimiter[i]) < 0) {
 			return false;
 		}
@@ -300,12 +298,11 @@ int ATCmdParser_analyse_args(char args[], char *arg_list[], int list_size)
 {
 	char _in_prev = 0;
 	int arg_num = 1;
-	int i;
 	size_t len = strlen(args);
 	
 	arg_list[0] = args;
 	
-	for (i = 0; i <= len; i++) {
+	for (int i = 0; i <= len; i++) {
 		debug_if(_dbg_on, "check %c, %d\r\n", args[i], len);
 		if (args[i]==',') {
 			debug_if(_dbg_on, "find ,\r\n");

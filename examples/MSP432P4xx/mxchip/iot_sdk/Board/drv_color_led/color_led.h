@@ -33,14 +33,7 @@
 #ifndef __COLOR_LED_H_
 #define __COLOR_LED_H_
 
-//#include <compiler.h>
-/* DriverLib Includes */
-#include "driverlib.h"
-
-/* Standard Includes */
 #include <stdint.h>
-
-#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,7 +59,19 @@ void color_led_init( void );
  *
  * @return none
  */
-void color_led_open(uint8_t red, uint8_t green, uint8_t blue);
+void color_led_open_rgb(uint8_t red, uint8_t green, uint8_t blue);
+
+
+/**
+ * @brief Set light parameters for RGB LED
+ *
+ * @param hues:         hues data of RGB LED
+ * @param saturation:   saturation data of RGB LED
+ * @param brightness:   brightness data of RGB LED
+ *
+ * @return none
+ */
+void color_led_open_hsb(float hues, float saturation, float brightness);
 
 
 /**

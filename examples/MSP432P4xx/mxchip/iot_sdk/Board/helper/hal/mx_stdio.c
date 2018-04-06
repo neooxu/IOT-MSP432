@@ -28,8 +28,6 @@ const eUSCI_UART_Config uartConfig =
 
 void mx_hal_stdio_init(void)
 {
-	uint32_t status;
-
     /* Selecting P1.2 and P1.3 in UART mode */
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P1,
             GPIO_PIN1 | GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);

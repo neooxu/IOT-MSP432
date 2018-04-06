@@ -81,3 +81,32 @@ mx_status handle_write_console(ali_att_val value)
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, (char *)console_buff);
 	return kNoErr;
 }
+
+void alisds_event_handler(alisds_event_e event)
+{
+	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, (char *)oled_clear_line);
+	switch (event) {
+		case ALISDS_EVENT_WLAN_CONFIG_STARTED: {
+			OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, "Wi-Fi config....");
+			break;
+		}
+		case ALISDS_EVENT_WLAN_CONNECTED: {
+			OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, "Wi-Fi connected");
+			break;
+		}
+		case ALISDS_EVENT_WLAN_DISCONNECTED: {
+			OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, "Wi-Fi disconnected");
+			break;
+		}
+		case ALISDS_EVENT_CLOUD_CONNECTED: {
+			OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, "Cloud connected");
+			break;
+		}
+		case ALISDS_EVENT_CLOUD_DISCONNECTED: {
+			OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, "Cloud disconnected");
+			break;
+		}
+	}
+}
+
+

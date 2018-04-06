@@ -1,13 +1,9 @@
 
 #include <stdio.h>
 #include "drv_board.h"
-#include "driverlib.h"
 
 void drv_board_init(void)
 {
-	/* Halting WDT  */
-    MAP_WDT_A_holdTimer();
-
 	/* System time ticker */
 	mx_hal_ms_ticker_init();
 
@@ -16,7 +12,10 @@ void drv_board_init(void)
 
 	/* RGB color led initialize */
 	color_led_init();
-	color_led_open(0, 0, 0);
+	color_led_open_rgb(0, 0, 0);
+
+	/* Temperature and humidity sensor  */
+	SHT2x_Init();
 
 	/* init OLED */
 	OLED_Init();

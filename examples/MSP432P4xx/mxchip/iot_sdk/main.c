@@ -8,6 +8,21 @@
 #include "driverlib.h"
 #include "io_button.h"
 
+const emh_ali_config_t alisds_config =
+{
+	.product_info = {
+		.name      = "tideveloper-001",
+		.modle      = "TI_LIVING_AIRBOX_TIDEVELOPER_001",
+		.key      = "0sB7jw6J4NA0HJGJfwrj",
+		.secret      = "r2jU6xdI8Itq7LqBzXI3HMvSPG8pJo35bXb1mcF9",
+		.format      = EMH_ARG_ALI_FORMAT_JSON,
+	},
+	.dev_info = {
+		.type      = "AIRBOX",
+		.category    = "LIVING",
+		.manufacture  = "TI",
+	}
+};
 
 void usr_btn_isr(void);
 void usr_clicked_handler(void);
@@ -59,10 +74,11 @@ int main(void)
 	mx_status err = kNoErr;
 
 	drv_board_init();
+	drv_board_test();
 
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "TI University");
 
-	err = alisds_init(ALI_HANDLE_MAX);
+	err = alisds_init(&alisds_config, ALI_HANDLE_MAX);
 	require_noerr(err, exit);
 	
 

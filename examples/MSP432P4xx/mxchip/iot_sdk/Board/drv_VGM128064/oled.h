@@ -40,7 +40,7 @@ extern "C" {
 #endif
 
 #define OLED_MODE 0
-#define SIZE 16
+#define CHAR_SIZE 16
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define Max_Column	128
@@ -110,7 +110,7 @@ void OLED_Clear(void);
  * 
  * @return none
  */
-void OLED_ShowString(uint8_t x,uint8_t y, char *p);
+void OLED_ShowString(uint8_t x,uint8_t y, const char *p);
 
 #ifdef __cplusplus
 }

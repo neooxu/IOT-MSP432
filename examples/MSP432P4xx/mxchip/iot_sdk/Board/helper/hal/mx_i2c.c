@@ -92,7 +92,7 @@ exit:
 	return err;
 }
 
-int32_t i2c_m_sync_cmd_read(void *instance, uint16_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t length)
+int32_t mx_hal_i2c_cmd_read(void *instance, uint16_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t length)
 {
     uint8_t i;
     /* Specify slave address */

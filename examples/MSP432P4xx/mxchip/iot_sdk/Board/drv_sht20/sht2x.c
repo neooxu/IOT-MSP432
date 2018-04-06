@@ -24,7 +24,7 @@ int ht20_i2c_bus_read(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
 {
 	int ret = 0;
 
-	ret = i2c_m_sync_cmd_read(i2c, I2C_ADDR_R, reg_addr, reg_data, cnt);
+	ret = mx_hal_i2c_cmd_read(i2c, I2C_ADDR_R, reg_addr, reg_data, cnt);
 	require_noerr(ret, exit);
 
 exit:	
@@ -55,14 +55,9 @@ float SHT2x_GetTempPoll(void)
 	uint8_t tmp[2];
 	uint16_t ST;
 	
-	tmp[0]=0;
-	tmp[1]=0;
-
 	ht20_i2c_bus_read(TRIG_TEMP_MEASUREMENT_POLL, tmp, 2);
 	ST = (tmp[0] << 8) | (tmp[1] << 0);
 
-	printf("SHT2x_GetTempPoll: %x, %x\r\n",tmp[0],tmp[1]);
-	
 #if 0
     u8 ack, tmp1, tmp2;
     u16 i=0;
@@ -100,14 +95,9 @@ float SHT2x_GetHumiPoll(void)
 	uint8_t tmp[2];
 	uint16_t SRH;
 
-	tmp[0]=0;
-	tmp[1]=0;
-		
 	ht20_i2c_bus_read(TRIG_HUMI_MEASUREMENT_POLL, tmp, 2);
 	SRH = (tmp[0] << 8) | (tmp[1] << 0);
 
-	printf("SHT2x_GetHumiPoll: %x, %x\r\n",tmp[0],tmp[1]);
-		
 #if 0
     float HUMI;
     u8 ack, tmp1, tmp2;
