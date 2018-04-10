@@ -1,0 +1,65 @@
+<projectSpec>
+  <project postBuildStep="${CCS_INSTALL_ROOT}/utils/tiobj2bin/tiobj2bin ${BuildArtifactFileName} ${BuildArtifactFileBaseName}.bin ${CG_TOOL_ROOT}/bin/armofd ${CG_TOOL_ROOT}/bin/armhex ${CCS_INSTALL_ROOT}/utils/tiobj2bin/mkhex4bin" compilerBuildOptions="-I${CMSIS_ROOT} -I${CCS_BASE_ROOT}/arm/include/CMSIS -I${CG_TOOL_ROOT}/include/ -I${PROJECT_ROOT} -I${MSPWAREDLIB_ROOT} -I${workspace_loc:/${ProjName}/Board} -I${workspace_loc:/${ProjName}/Board/drv_button} -I${workspace_loc:/${ProjName}/Board/drv_color_led} -I${workspace_loc:/${ProjName}/Board/drv_sht20} -I${workspace_loc:/${ProjName}/Board/drv_VGM128064} -I${workspace_loc:/${ProjName}/Board/helper} -I${workspace_loc:/${ProjName}/Board/helper/hal} -I${workspace_loc:/${ProjName}/Board/AliCloud_SDS} -I${workspace_loc:/${ProjName}/Board/helper/emhost} -I${workspace_loc:/${ProjName}/Board/helper/jsmn} -I${CG_TOOL_ROOT}/include  -mv7M4 --code_state=16 --float_support=FPv4SPD16 --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --gcc -std=gnu11 --define=ccs" device="Cortex M.MSP432P401R" name="iot_sdk" ignoreDefaultDeviceSettings="true" linkerCommandFile="iot_msp432_ccs.cmd" linkerBuildOptions="--stack_size=512">
+    <pathVariable name="MSPWAREDLIB_ROOT" path="../../../../../driverlib/MSP432P4xx/" scope="project" />
+    <pathVariable name="CMSIS_ROOT" path="../../../../../inc/" scope="project" />
+    <file action="copy" path="../main.c" openOnCreation="true" />
+    <file action="copy" path="../main.h" />
+    <file action="copy" path="../iot_msp432_ccs.cmd" />
+    <file action="copy" path="../app_console.c" />
+    <file action="copy" path="../app_rgbled.c" />
+    <file action="copy" path="../app_sht20.c" />
+    <file action="copy" path="../app_switch.c" />
+    <file action="copy" path="../system_msp432p401r.c" />
+    <file action="copy" path="../startup_msp432p401r_ccs.c" />
+    <file action="copy" path="../Board/AliCloud_SDS/alicloud_sds.c" targetDirectory="Board/AliCloud_SDS/" />
+    <file action="copy" path="../Board/AliCloud_SDS/alicloud_sds.h" targetDirectory="Board/AliCloud_SDS/" />
+    <file action="copy" path="../Board/AliCloud_SDS/alicloud_sds_db.h" targetDirectory="Board/AliCloud_SDS/" />
+    <file action="copy" path="../Board/drv_button/io_button.c" targetDirectory="Board/drv_button/" />
+    <file action="copy" path="../Board/drv_button/io_button.h" targetDirectory="Board/drv_button/" />
+    <file action="copy" path="../Board/drv_color_led/color_led.c" targetDirectory="Board/drv_color_led/" />
+    <file action="copy" path="../Board/drv_color_led/color_led.h" targetDirectory="Board/drv_color_led/" />
+    <file action="copy" path="../Board/drv_color_led/hsb2rgb.c" targetDirectory="Board/drv_color_led/" />
+    <file action="copy" path="../Board/drv_sht20/sht2x.c" targetDirectory="Board/drv_sht20/" />
+    <file action="copy" path="../Board/drv_sht20/sht2x.h" targetDirectory="Board/drv_sht20/" />
+    <file action="copy" path="../Board/drv_VGM128064/oled.c" targetDirectory="Board/drv_VGM128064/" />
+    <file action="copy" path="../Board/drv_VGM128064/oled.h" targetDirectory="Board/drv_VGM128064/" />
+    <file action="copy" path="../Board/drv_VGM128064/oledfont.h" targetDirectory="Board/drv_VGM128064/" />
+    <file action="copy" path="../Board/helper/emhost/ATCmdParser/ATCmdParser.c" targetDirectory="Board/helper/emhost/ATCmdParser/" />
+    <file action="copy" path="../Board/helper/emhost/ATCmdParser/ATCmdParser.h" targetDirectory="Board/helper/emhost/ATCmdParser/" />
+    <file action="copy" path="../Board/helper/emhost/emh_alicloud.c" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_arg.c" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_arg.h" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_api.h" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_event.h" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_module.c" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/emhost/emh_wlan.c" targetDirectory="Board/helper/emhost/" />
+    <file action="copy" path="../Board/helper/hal/mx_hal_atomic.c" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/hal/mx_hal.h" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/hal/mx_i2c.c" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/hal/mx_serial.c" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/hal/mx_stdio.c" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/hal/mx_tick.c" targetDirectory="Board/helper/hal/" />
+    <file action="copy" path="../Board/helper/jsmn/jsmn.c" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/jsmn.h" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_escape_str.c" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_escape_str.h" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_generator.c" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_generator.h" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_parser.h" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_utils.c" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_utils.h" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/jsmn/json_wrappers.c" targetDirectory="Board/helper/jsmn/" />
+    <file action="copy" path="../Board/helper/mx_utils/mx_ringbuffer.c" targetDirectory="Board/helper/mx_utils/" />
+    <file action="copy" path="../Board/helper/mx_utils/mx_ringbuffer.h" targetDirectory="Board/helper/mx_utils/" />
+    <file action="copy" path="../Board/helper/mx_common.h" targetDirectory="Board/helper/" />
+    <file action="copy" path="../Board/helper/mx_debug.h" targetDirectory="Board/helper/" />
+    <file action="copy" path="../Board/helper/mx_opt.h" targetDirectory="Board/helper/" />
+    <file action="copy" path="../Board/helper/mx_toolchain.h" targetDirectory="Board/helper/" />
+    <file action="copy" path="../Board/board.h" targetDirectory="Board/" />
+    <file action="copy" path="../Board/drv_board.c" targetDirectory="Board/" />
+    <file action="copy" path="../Board/drv_board.h" targetDirectory="Board/" />
+    <file action="copy" path="../Board/drv_board_test.c" targetDirectory="Board/" />
+    <file action="copy" path="../../../MSP432P401R.ccxml" />
+    <file action="link" path="${MSPWAREDLIB_ROOT}/ccs/msp432p4xx_driverlib.lib" />
+  </project>
+</projectSpec>
