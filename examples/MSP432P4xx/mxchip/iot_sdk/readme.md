@@ -35,6 +35,9 @@
 ![下载ccs](/image/download_ccs.png) 
 
 
+![下载ccs](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/download_ccs.png)
+
+
 **注意：**下载需先登录。如无账号，请先注册，登录后，才能下载。
 
 
@@ -61,6 +64,9 @@
 在 “Getting Started” 页面，依次点击 "Import Project"，再点击 “browse” 选择导入的工程文件夹：iot-sdk，路径如：F:\Git\IOT-MSP432\examples\MSP432P4xx\mxchip\iot_sdk，最后点击 “Finish” 即可。如下图所示。
 
 ![导入工程](/image/import_project.png) 
+
+
+![导入工程](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/import_project.png) 
 
 当出现下图提示时，请点击 "OK"，即可正常导入。
 
