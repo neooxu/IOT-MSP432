@@ -156,20 +156,22 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 1.下载安装APP: 点击 [示例 APP 下载页面](http://www.pgyer.com/MICROa)，或扫描下方二维码，请根据手机系统类型选择下载。
 
-
-![app下载](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_download_address.png)  ——> ![启动配网](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/net_config.png)
+![app下载](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_download_address.png)  
 
 2.使用手机号码，进行 APP 用户账号注册，验证，登录。
 
-3.请确保手机已经成功连接至现场路由器，请参见下图。
+![app注册登录](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_login.png)
 
-![设备供电](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/device_power.png) 
+3.请确保手机已经成功连接至现场路由器。
+
+
 
 
 **—— 开发板设备端**
 
 1. 请使用 microUSB 连接线为开发板供电，并确认红色电源灯常亮，保证供电正常。
 
+![设备供电](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/device_power.png) 
 
 
 ### 启动配网
