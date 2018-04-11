@@ -1,4 +1,4 @@
-# How to use iot-sdk
+# How to use MXkit-L21 sdk
   
 -------------------------------------
 目录
@@ -21,35 +21,26 @@
 
 
 ## 简介
-本 sdk 提供一个基于 MSP-EXP432P401R 开发板，通过与 Wi-Fi 模块进行 AT 指令串口通信，实现与阿里云 SDS 直连的 IoT 物联网典型开发应用示例源代码。
+本 sdk 提供一个基于 Microchip 开发板 SAML2x IOT SK V2.0，通过与 Wi-Fi 模块进行 AT 指令串口通信，实现与阿里云 SDS 直连的 IoT 物联网典型开发应用示例源代码。
 
-下面来讲解如何在您的 PC 上安装 CCS 开发环境，并在 CCS 中进行编译，下载本 sdk 工程。 
+下面来讲解如何在您的 PC 上安装 Atmel Studio 开发环境，编译，下载本 sdk 工程。 
 
 
 
 ## 下载IDE
-点击 [CCS 下载](http://processors.wiki.ti.com/index.php/XMS432_Support#Software_Compatibility)，进入开发工具下载列表页面。
-
-在 “IDE Compatibility” 列表中，选择 “MSP432401R REVC” 选项中，适用您 PC 系统类型的 CCS 版本。如： Windows 系统 PC 开发环境，请下载： CCS Windows 对应的 CCS 6.1.1 .zip 文件。
+点击 [Atmel Studio下载](http://www.microchip.com/avr-support/atmel-studio-7)，进入下载列表，选择适合您 PC 系统类型的 IDE 版本。可以选择 “web installer” 安装方式，也可以选择 “offline installer” 模式。
 
 
-![下载ccs](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/download_ccs.png)
-
-
-**注意：**下载需先登录。如无账号，请先注册，登录后，才能下载。
+![下载atmel studio](https://github.com/neooxu/MXkit-L21/tree/master/MXkit-L21/image/download_ccs.png)
 
 
 
 ## 安装IDE
-下载完成后，解压缩，双击 “ccs_setup_6.1.1.00022.exe” 启动安装。 其中：
-
-1. 进入 “Processor Support” 页面, 请务必勾选 “MSP Ultra Low Power MCUS”，然后其它均默认，点击 “next” 即可。
-2. 进入 “CCS Installation” 页面，启动安装，安装过程需耗费几分钟时间，请耐心等待。（请务必保证您的电脑保持联网状态。） 
-3. 安装进程结束后，建议选择生成桌面快捷方式，以便开发时快速进入。
+下载完成后，双击安装程序 “exe” 文件，启动安装，全部选择默认，next 到底 即可。
 
 
 ## 获取SDK
-点击 [iot-sdk 下载](https://github.com/neooxu/IOT-MSP432)，进入工程源代码的 github 仓库。 您可以：
+点击 [MXkit-L21 SDK 下载](https://github.com/neooxu/MXkit-L21)，进入工程源代码的 github 仓库。 您可以：
 
 1. 如已安装 Git 软件，使用 git 命令克隆到 PC 本地：`git clone git@github.com:neooxu/IOT-MSP432.git` 
 2. 如未安装 Git 软件，可直接下载压缩包文件 PC 本地，点击仓库文件列表右上方， “Download ZIP",下载后解压缩即可。
@@ -57,51 +48,13 @@
 
 
 ## 导入工程
-双击桌面快捷方式 “Code Composer Studio 6.1.1”，进入 CCS 开发环境。
+双击 "" 打开 IDE 。
 
 在 “Getting Started” 页面，依次点击 "Import Project"，再点击 “browse” 选择导入的工程文件夹：iot-sdk，路径如：F:\Git\IOT-MSP432\examples\MSP432P4xx\mxchip\iot_sdk，最后点击 “Finish” 即可。如下图所示。
 
 ![导入工程](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/import_project.png) 
 
-当出现下图提示时，请点击 "OK"，即可正常导入。
 
-![继续导入](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/import_OK.png) 
-
-
-## 配置工程
-为了正常编译iot-sdk文件，需对工程进行以下 3 步配置。
-
-### 删除Include选项
-
-* 左边栏 “Project Exploer” 选中工程 “iot_sdk”,右键选择 “Properties”,打开页面。  找到 “Build" —> "MSP432 Complier" —> "Include Options” ， 删除该页面的第一个path：“${CCS_BASE_ROOT}/arm/include”。
-
-![删除一项](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/ccsconfig_delete.png) 
-
-
-### 修改Language选项
-
-* 在工程 “Properties” 页面，找到  “Build” —> “MSP432 Complier” —> “Advanced Options” —>  “Language Options", 页面中 “
-C Dialect"一栏， 请选择 “Complile program in C99 mode.(--c99)”,如下图所示。
-
-![选择c99](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/ccsconfig_choosec99.png) 
-
-### 更新到评估版本
-
-* 菜单栏中选择 “help" —> "Code Composer Studio Licensing Information", 进入  “License information view”页面，
-
-![进入license修改页面](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/ccsconfig_license_into.png) 
-
-* 选择 “Upgrade" —> "Launch License Setup”，进入 “License Setup Wizard” 页面。
-
-![license修改](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/license_information.png) 
-
-* 请选择 “EVALUATE” 选项，如下图。
-
-![license修改](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/ccsconfig_license_update.png) 
-
-注意：每台 PC 仅限一次 License 更新机会，若二次安装，该 PC 便无法正常更新。
-
-至此，工程已配置完成，可进行编译下载。
 
 
 ## 编译工程
@@ -127,15 +80,7 @@ C Dialect"一栏， 请选择 “Complile program in C99 mode.(--c99)”,如下�
 
 ![下载过程](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/download_process.png) 
 
-下载完成后， CCS 会自动跳转至 “在线调试” 状态，如下图所示：
 
-![调试过程](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/debug_status.png) 
-
-此时，开发者可以进行 单步调试 等操作。
-
-若要退出调试状态，请点击工具栏 红色正方形 图标，如下图。
-
-![退出调试](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/quit_debug.png) 
 
 
 
@@ -154,9 +99,9 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 **—— 手机 APP 端**
 
-1.下载安装APP: 点击 [示例 APP 下载页面](http://www.pgyer.com/MICROa)，或扫描下方二维码，请根据手机系统类型选择下载。
+1.下载安装APP: 点击 [示例 APP 下载页面](https://www.pgyer.com/TIAnd)，或扫描下方二维码，请根据手机系统类型选择下载。
 
-![app下载](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_download_address.png)  
+![app下载](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_address.png)  
 
 2.使用手机号码，进行 APP 用户账号注册，验证，登录。
 
@@ -171,7 +116,7 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 1. 请使用 microUSB 连接线为开发板供电，并确认红色电源灯常亮，保证供电正常。
 
-![设备供电](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/device_power.png) 
+![设备供电](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/device_power_on.png) 
 
 
 ### 启动配网
