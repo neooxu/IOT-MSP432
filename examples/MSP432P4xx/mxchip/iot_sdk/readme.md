@@ -160,7 +160,7 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 2.使用手机号码，进行 APP 用户账号注册，验证，登录。
 
-![app注册登录](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_login.png)
+![app注册登录](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/app_userid.png)
 
 3.请确保手机已经成功连接至现场路由器。
 
