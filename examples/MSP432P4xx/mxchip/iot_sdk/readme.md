@@ -49,10 +49,10 @@
 
 
 ## 获取SDK
-点击 [iot-sdk 下载](https://github.com/neooxu/IOT-MSP432)，进入工程源代码的 github 仓库。 您可以：
+点击 [iot-sdk 下载](https://github.com/neooxu/IOT-MSP432/releases)，进入工程源代码的 github 仓库。 您需要：
 
-1. 如已安装 Git 软件，使用 git 命令克隆到 PC 本地：`git clone git@github.com:neooxu/IOT-MSP432.git` 
-2. 如未安装 Git 软件，可直接下载压缩包文件 PC 本地，点击仓库文件列表右上方， “Download ZIP",下载后解压缩即可。
+下载 zip 或 tar.gz 压缩包文件到 PC 本地，“Download ZIP",下载后解压缩即可。
+
 
 
 
@@ -69,7 +69,7 @@
 
 
 ## 配置工程
-为了正常编译iot-sdk文件，需对工程进行以下 3 步配置。
+为了在 CCS IDE 环境中正常编译 iot-sdk 文件，需对工程进行以下 3 步配置。
 
 ### 删除Include选项
 
@@ -99,7 +99,7 @@ C Dialect"一栏， 请选择 “Complile program in C99 mode.(--c99)”,如下�
 
 ![license修改](https://github.com/neooxu/IOT-MSP432/blob/master/examples/MSP432P4xx/mxchip/iot_sdk/image/ccsconfig_license_update.png) 
 
-注意：每台 PC 仅限一次 License 更新机会，若二次安装，该 PC 便无法正常更新。
+注意：每台 PC 仅限一次 License 更新机会，若二次安装 IDE，该 PC 便无法正常更新。
 
 至此，工程已配置完成，可进行编译下载。
 
