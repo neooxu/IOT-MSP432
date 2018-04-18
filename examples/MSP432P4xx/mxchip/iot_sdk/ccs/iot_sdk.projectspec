@@ -29,7 +29,6 @@
     <file action="copy" path="../Board/helper/emhost/emh_arg.c" targetDirectory="Board/helper/emhost/" />
     <file action="copy" path="../Board/helper/emhost/emh_arg.h" targetDirectory="Board/helper/emhost/" />
     <file action="copy" path="../Board/helper/emhost/emh_api.h" targetDirectory="Board/helper/emhost/" />
-    <file action="copy" path="../Board/helper/emhost/emh_event.h" targetDirectory="Board/helper/emhost/" />
     <file action="copy" path="../Board/helper/emhost/emh_module.c" targetDirectory="Board/helper/emhost/" />
     <file action="copy" path="../Board/helper/emhost/emh_wlan.c" targetDirectory="Board/helper/emhost/" />
     <file action="copy" path="../Board/helper/hal/mx_hal_atomic.c" targetDirectory="Board/helper/hal/" />
