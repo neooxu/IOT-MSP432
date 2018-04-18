@@ -1,11 +1,33 @@
-
+/**
+ ******************************************************************************
+ * @file    mx_stdio.c
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   Initialize uart for printf output
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
 #include <stdio.h>
 #include "mx_common.h"
 
 #include "system_msp432p401r.h"
 #include "driverlib.h"
-
-char hello[] = "Helloworld\r\n";
 
 /* UART Configuration Parameter. These are the configuration parameters to
  * make the eUSCI A UART module to operate with a 115200 baud rate. These

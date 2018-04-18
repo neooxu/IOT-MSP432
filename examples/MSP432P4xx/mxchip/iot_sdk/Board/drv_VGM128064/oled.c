@@ -1,46 +1,68 @@
 /**
  ******************************************************************************
  * @file    oled.c
- * @author  Eshen Wang
+ * @author  William Xu
  * @version V1.0.0
- * @date    17-Mar-2015
- * @brief   OLED controller.
+ * @date    9-Apr-2018
+ * @brief   oled driver VGM128064 functions
  ******************************************************************************
  *
- *  The MIT License
- *  Copyright (c) 2016 MXCHIP Inc.
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is furnished
- *  to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  ******************************************************************************
  */
+
+
 #include <string.h>
 #include <stdio.h>
 
 #include "mx_hal.h"
 #include "oled.h"
-#include "oledfont.h"  	 
+#include "oledfont.h"
 
-/* SSD1106 I2C bus driver*/
-int ssd1106_i2c_bus_init(void);
-void ssd1106_delay_ms(uint16_t nms);
-int ssd1106_i2c_bus_write(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt);
+/******************************************************************************
+ *                                 Constants
+ ******************************************************************************/
 
+#define OLED_MODE 0
+#define CHAR_SIZE 16
+#define XLevelL		0x00
+#define XLevelH		0x10
+#define Max_Column	128
+#define Max_Row		64
+#define	Brightness	0xFF 
+#define X_WIDTH 	128
+#define Y_WIDTH 	64
+
+#define OLED_CMD  0
+#define OLED_DATA 1
+
+/******************************************************************************
+ *                           Static Function Declarations
+ ******************************************************************************/
+
+/**
+ *  SSD1106 I2C bus driver
+ */
+static int ssd1106_i2c_bus_init(void);
+static void ssd1106_delay_ms(uint16_t nms);
+static int ssd1106_i2c_bus_write(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt);
+
+/******************************************************************************
+ *                              Function Definitions
+ ******************************************************************************/
 
 /* OLED operation functions */
 void OLED_WR_Bytes(uint8_t *dat, uint8_t len, uint8_t cmd)
@@ -229,7 +251,7 @@ void OLED_Init(void)
       printf( "OLED_ERROR: I2C port init err." );
       return;
   }
-
+  
   OLED_WR_Byte(0xAE,OLED_CMD);//--turn off oled panel
   OLED_WR_Byte(0x00,OLED_CMD);//---set low column address
   OLED_WR_Byte(0x10,OLED_CMD);//---set high column address
@@ -267,37 +289,40 @@ void OLED_Init(void)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+ *                          SSD1106 bus driver
+ ******************************************************************************/
 
+/* I2C bus port */
+#include "mx_hal.h"
 #include "system_msp432p401r.h"
 #include "driverlib.h"
 
-#include "mx_hal.h"
 
 static void *i2c = NULL;
 
-void ssd1106_delay_ms(uint16_t nms)
+static void ssd1106_delay_ms(uint16_t nms)
 {
-  mx_hal_delay_ms(nms);
+	mx_hal_delay_ms(nms);
 }
 
 
-int ssd1106_i2c_bus_init(void)
+static int ssd1106_i2c_bus_init(void)
 {
-  i2c = mx_hal_i2c_init(NULL);
+	i2c = mx_hal_i2c_init(NULL);
+	
+	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN1);
 
-  MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN1);
-
-  MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN1);
+	MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN1);
 	ssd1106_delay_ms(100);
 	MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN1);
 	ssd1106_delay_ms(100);
 	MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN1);
-
+	  
 	return 0;
 }
 
-int ssd1106_i2c_bus_write(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
+static int ssd1106_i2c_bus_write(uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
 {	
 	int ret = 0;
 	ret = mx_hal_i2c_cmd_write(i2c, 0x3c, reg_addr, reg_data, cnt);

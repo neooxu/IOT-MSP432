@@ -1,62 +1,102 @@
-#include "mx_debug.h"
-#include "emh_api.h"
-#include "alicloud_sds.h"
+/**
+ ******************************************************************************
+ * @file    alicloud_sds.c
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   AliCloud SDS service functions and framework
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
 
+#include "mx_hal.h"
+
+#include "alicloud_sds.h"
 #include "json_generator.h"
 #include "json_parser.h"
 
-#include "drv_board.h"
+/******************************************************************************
+ *                                   Macros
+ ******************************************************************************/
 
-#define APP_DEBUG MX_DEBUG_ON
-#define sds_log(M, ...) MX_LOG(APP_DEBUG, "SDS", M, ##__VA_ARGS__)
+#define sds_log(M, ...) MX_LOG(CONFIG_CLOUD_DEBUG, "SDS", M, ##__VA_ARGS__)
 
-static const emh_ali_config_t *ali_config = NULL;
+/******************************************************************************
+ *                                 Constants
+ ******************************************************************************/
+
+#define SDS_NUM_TOKENS	30 /**< Used for JSON data parser, reduce to save memory */
+
+/******************************************************************************
+ *                                 Enumerations
+ ******************************************************************************/
 
 typedef enum
 {
-	eState_M1_initialize           = 1,
-	eState_M2_provision            = 2,
-	eState_M3_normal               = 3,
-	eState_M4_disconnected         = 4,
-	eState_M5_fault                = 5,
+	eState_M1_initialize           = 1,	/**< State machine: Reset and initialize module */
+	eState_M2_provision            = 2,	/**< State machine: Waiting for WiFi config and cloud connection */
+	eState_M3_normal               = 3,	/**< State machine: Connected to cloud, application running  */
+	eState_M4_disconnected         = 4,	/**< State machine: Disconnect to cloud, all data transmission should stop */
+	eState_M5_fault                = 5,	/**< State machine: Drop in an unexpected error */
 } cc_device_state_e;
 
+/******************************************************************************
+ *                               Type Definitions
+ ******************************************************************************/
+
 typedef struct {
-	cc_device_state_e device_state;
-	emh_arg_ali_conn_e cloud_state;
-	bool delay_prov;
-	int num_handles;
+	cc_device_state_e device_state;		/**< Device state machine. */
+	emh_arg_alisds_conn_t cloud_state;		/**< SDS service connection state. */
+	bool delay_prov;					/**< Send prov message after cloud is connected. */
+	int num_handles;					/**< Max. SDS characteristics numbers registered on cloud */
 } cc_context_t;
 
-//BBED
-//const char *dev_key = "R41Qd1Rm9CMtWWmUIsTM";
-//const char *dev_sec = "CnJ9c7DoRBgrAsVT9IHoYMz0LviLgWjw";
+/******************************************************************************
+ *                              Variable Definitions
+ ******************************************************************************/
 
-//BBEA
-const char *dev_key = "eImkAqUT24v1VYO8fbmf";
-const char *dev_sec = "7qSOxEu7HcbDDa0LJSc0sHLVnEjnn3qZ";
+static const emh_alisds_config_t *ali_config = NULL;
+static cc_context_t context;
 
-//BBE0
-//const char *dev_key = "R41Qd1Rm9CMtWWmUIsTM";
-//const char *dev_sec = "CnJ9c7DoRBgrAsVT9IHoYMz0LviLgWjw";
-
-
-//microchip
-//const char *dev_key = "7UXu5dclxk6Gja8LzelT";
-//const char *dev_sec = "xXKxoAVPtTfeoP2DDwOnUB7ZxnIbuoaJ";
-
-
-cc_context_t context;
-
+// Changed handles should bu update to cloud 
 static int *changed_handles = NULL;
-static ali_dev_attr_t *alisds_attr_db = NULL;
 
-static char incomming_val[SDS_ATTR_VAL_MAX_LEN];
-static char incomming_name[SDS_ATTR_NAME_MAX_LEN];
+// Characteristic description and handler functions registered by application
+static alisds_attr_t *alisds_attr_db = NULL;
 
-extern const char oled_clear_line[OLED_DISPLAY_MAX_CHAR_PER_ROW];
+// Temporary storage for Characteristic name and value, de-packed from JSON message
+static char incomming_val[ALISDS_ATTR_VAL_MAX_LEN];
+static char incomming_name[ALISDS_ATTR_NAME_MAX_LEN];
+
+/******************************************************************************
+ *                           Static Function Declarations
+ ******************************************************************************/
+
+/**
+ * Send attribute value to SDS cloud
+ */
+static void alisds_indicate_local_atts(int attr_handles[], int num);
+
+/******************************************************************************
+ *                              Function Definitions
+ ******************************************************************************/
 		
-mx_status alisds_init(const emh_ali_config_t *config, int num_handles)
+mx_status alisds_init(const emh_alisds_config_t *config, int num_handles)
 {
 	mx_status err = kNoErr;
 	
@@ -64,21 +104,21 @@ mx_status alisds_init(const emh_ali_config_t *config, int num_handles)
 	require_action(changed_handles, exit, err = kNoMemoryErr); 
 	
 	for (int i = 0; i < num_handles; i++) {
-		changed_handles[i] = ALI_HANDLE_NONE;
+		changed_handles[i] = ALISDS_INVALID_HANDLE;
 	}
 	
-	alisds_attr_db = malloc(num_handles*sizeof(ali_dev_attr_t));
+	alisds_attr_db = malloc(num_handles*sizeof(alisds_attr_t));
 	require_action(alisds_attr_db, exit, err = kNoMemoryErr);
-	memset(alisds_attr_db, 0x0, num_handles*sizeof(ali_dev_attr_t));
+	memset(alisds_attr_db, 0x0, num_handles*sizeof(alisds_attr_t));
 	
 	context.device_state = eState_M1_initialize;
-	context.cloud_state = EMH_ARG_ALI_CONN_DISCONNECTED;
+	context.cloud_state = EMH_ARG_ALISDS_CONN_DISCONNECTED;
 	context.delay_prov = false;
 	context.num_handles = num_handles;
 	
 	ali_config = config;
 	
-	err = emh_module_init();
+	err = emh_init();
 	require_noerr(err, exit);
 	
 exit:
@@ -89,10 +129,10 @@ exit:
 	return err;
 }
 
-mx_status alisds_attr_init(cc_device_handle handle, ali_dev_attr_t attr)
+mx_status alisds_attr_init(alisds_attr_handle_t handle, alisds_attr_t attr)
 {
 	alisds_attr_db[handle].name = attr.name;
-	alisds_attr_db[handle].att_type = attr.att_type;
+	alisds_attr_db[handle].type = attr.type;
 	alisds_attr_db[handle].read_func = attr.read_func;
 	alisds_attr_db[handle].write_func = attr.write_func;
 	
@@ -107,15 +147,15 @@ static mx_status _handle_state_initialize(void)
 
 	sds_log("FW version: %s", emh_module_get_fw_version());
 
-	err = emh_ali_config(ali_config);
+	err = emh_alisds_config(ali_config);
 	require_noerr(err, exit);
 	
 	/* Set cloud access token */
-	//err = emh_ali_set_key(dev_key, dev_sec);
+	//err = emh_alisds_set_key(dev_key, dev_sec);
 	//require_noerr(err, exit);
 	
 	/* Start alisds daemon service*/
-	err = emh_ali_start_service();
+	err = emh_alisds_start_service();
 	require_noerr(err, exit);
 
 	/* Check Wi-Fi configuration */
@@ -124,7 +164,7 @@ static mx_status _handle_state_initialize(void)
 
 	if (strlen(ssid)) {
 		sds_log("SSID: %s, PWD: %s", ssid, pwd);
-		if (EMH_ARG_ALI_STATUS_CONNECTED == emh_ali_get_status()) {
+		if (EMH_ARG_ALISDS_STATUS_CONNECTED == emh_alisds_get_status()) {
 			sds_log("Alicloud connected.");
 			mx_hal_delay_ms(200);
 			context.device_state = eState_M3_normal;
@@ -136,9 +176,9 @@ static mx_status _handle_state_initialize(void)
 	}
 	else {
 		sds_log("Wlan unconfigured, start provision mode");
-		
+
 		/* Start alisds Wi-Fi configuration */
-		err = emh_ali_provision(true);
+		err = emh_alisds_provision(true);
 		require_noerr(err, exit);
 		
 		alisds_event_handler(ALISDS_EVENT_WLAN_CONFIG_STARTED);
@@ -149,18 +189,16 @@ exit:
 	return err;
 }
 
-
 void alisds_attr_indicate_by_handle(int handle)
 {
 	int i;
-	for (i = 0; i < context.num_handles && changed_handles[i] != ALI_HANDLE_NONE; i++) {
-		
+	for (i = 0; i < context.num_handles && changed_handles[i] != ALISDS_INVALID_HANDLE; i++) {
 		if (changed_handles[i] == handle) return;
 	}
 	changed_handles[i]=handle;
 }
 
-mx_status alisds_loop(void)
+mx_status alisds_runloop(void)
 {
 	mx_status err = kNoErr;
 	alisds_indicate_local_atts(changed_handles, context.num_handles);
@@ -193,14 +231,13 @@ mx_status alisds_loop(void)
 			err = kNoErr;
 	}
 	
-	emh_module_task();
+	emh_runloop();
 exit:
 	return err;
 }
 
 
-
-void emh_ev_wlan(emh_arg_wlan_ev_e event)
+void emh_ev_wlan(emh_arg_wlan_ev_t event)
 {
 	sds_log("Wlan event: %s", emh_arg_for_type(EMH_ARG_WLAN_EV, event));
 	if (event == EMH_ARG_WLAN_EV_STA_CONNECTED) {
@@ -211,61 +248,54 @@ void emh_ev_wlan(emh_arg_wlan_ev_e event)
 	}
 }
 
-void emh_ev_ali_connection(emh_arg_ali_conn_e conn)
+void emh_ev_alisds_connection(emh_arg_alisds_conn_t conn)
 {
-	sds_log("AliCloud event: %s", emh_arg_for_type(EMH_ARG_ALI_CONN, conn));
+	sds_log("AliCloud event: %s", emh_arg_for_type(EMH_ARG_ALISDS_CONN, conn));
 	
 	context.cloud_state = conn;
 	
-	if (conn == EMH_ARG_ALI_CONN_CONNECTED) {
+	if (conn == EMH_ARG_ALISDS_CONN_CONNECTED) {
 		if (context.delay_prov == true) {
 			alisds_provision();
 			context.delay_prov = false;
 		}
 
-		
+		/* EMW3080 has unexpected uart data lost after cloud connection, should fix in future */
 		mx_hal_delay_ms(1000);
 		alisds_event_handler(ALISDS_EVENT_CLOUD_CONNECTED);
 		
 		context.device_state = eState_M3_normal;
-		/* Alicloud get local value event do not trigger, so we trigger automatically */
-		//for (int i = 0; i<context.num_handles; i++) {
-		//	alisds_attr_indicate_by_handle(i);
-		//}
 	}
 
-	if (conn == EMH_ARG_ALI_CONN_DISCONNECTED) {
+	if (conn == EMH_ARG_ALISDS_CONN_DISCONNECTED) {
 		alisds_event_handler(ALISDS_EVENT_CLOUD_DISCONNECTED);
 		context.device_state = eState_M4_disconnected;
 	}
 }
 
 
-#define NUM_TOKENS	30
-
-
-void emh_ev_ali_set_local_atts(emh_ali_local_attrs_t *attrs)
+void emh_ev_alisds_set_local_atts(emh_alisds_msg *attrs)
 {
-	jsontok_t json_tokens[NUM_TOKENS];
+	jsontok_t json_tokens[SDS_NUM_TOKENS];
 	jobj_t jobj;
 	
-	ali_att_val value;
+	alisds_att_val_t value;
 	int attr_handles[50];
 	int num;
 	int handle;
 	
 	sds_log("Set local attrs event");
-	require(attrs->format==EMH_ARG_ALI_FORMAT_JSON, exit);
+	require(attrs->format==EMH_ARG_ALISDS_FORMAT_JSON, exit);
 	
 	memset(attr_handles, 0, 50);
-	mx_status err = json_init(&jobj, json_tokens, NUM_TOKENS, (char *)attrs->data, attrs->len);
+	mx_status err = json_init(&jobj, json_tokens, SDS_NUM_TOKENS, (char *)attrs->data, attrs->len);
 	if (err != kNoErr) return;
 	
 	err = json_get_array_object(&jobj, "attrSet", &num);
 	require_noerr(err, exit);
 	
 	for (int i = 0; i < num; i++) {
-		err = json_array_get_str(&jobj, i, incomming_name, SDS_ATTR_NAME_MAX_LEN);
+		err = json_array_get_str(&jobj, i, incomming_name, ALISDS_ATTR_NAME_MAX_LEN);
 		require_noerr(err, exit);
 		
 		for( handle = 0; handle < context.num_handles; handle++) {
@@ -284,15 +314,15 @@ void emh_ev_ali_set_local_atts(emh_ali_local_attrs_t *attrs)
 		
 		if (alisds_attr_db[handle].write_func == NULL) continue;
 		if (kNoErr == json_get_composite_object(&jobj, alisds_attr_db[handle].name)) {
-			if (kNoErr == json_get_val_str(&jobj, "value", incomming_val, SDS_ATTR_VAL_MAX_LEN)) {
-				if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_BOOL
-				||  alisds_attr_db[handle].att_type == ALI_ATT_TYPE_INT) {
+			if (kNoErr == json_get_val_str(&jobj, "value", incomming_val, ALISDS_ATTR_VAL_MAX_LEN)) {
+				if (alisds_attr_db[handle].type == ALI_ATT_TYPE_BOOL
+				||  alisds_attr_db[handle].type == ALI_ATT_TYPE_INT) {
 					sscanf(incomming_val, "%d", (int *)&value);
 				}
-				else if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_FLOAT) {
+				else if (alisds_attr_db[handle].type == ALI_ATT_TYPE_FLOAT) {
 					sscanf(incomming_val, "%f", (float *)&value);
 				}
-				else if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_STRING) {
+				else if (alisds_attr_db[handle].type == ALI_ATT_TYPE_STRING) {
 					value.stringValue = incomming_val;
 				}
 				alisds_attr_db[handle].write_func(value);
@@ -316,11 +346,11 @@ void alisds_indicate_local_atts(int attr_handles[], int num)
 	char buff[512] = {0};
 	char val_str[20];
 	mx_status err = kNoErr;
-	ali_att_val value;
+	alisds_att_val_t value;
 	int handle;
 	int i;
 	
-	if(attr_handles[0]==ALI_HANDLE_NONE) return;
+	if(attr_handles[0]==ALISDS_INVALID_HANDLE) return;
 	
 	sds_log("Indicate local attrs");
 	
@@ -329,43 +359,39 @@ void alisds_indicate_local_atts(int attr_handles[], int num)
 	err = json_start_object(&jstr);
 	require_noerr(err, exit);
 	
-	for (i = 0; i < num && attr_handles[i] != ALI_HANDLE_NONE; i++) {
+	for (i = 0; i < num && attr_handles[i] != ALISDS_INVALID_HANDLE; i++) {
 		handle = attr_handles[i];
 		if (alisds_attr_db[handle].read_func == NULL ) continue;
 				
 		err = json_push_object(&jstr, alisds_attr_db[handle].name);
 		require_noerr(err, exit);
 		
-		if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_BOOL) {
+		if (alisds_attr_db[handle].type == ALI_ATT_TYPE_BOOL) {
 			err = alisds_attr_db[handle].read_func(&value);
 			require_noerr(err, exit);
 			snprintf(val_str, 20, "%d", value.boolValue);
 			err = json_set_val_str(&jstr, "value", val_str);
 			require_noerr(err, exit);
 		}
-		else if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_INT) {
+		else if (alisds_attr_db[handle].type == ALI_ATT_TYPE_INT) {
 			err = alisds_attr_db[handle].read_func(&value);
 			require_noerr(err, exit);
 			snprintf(val_str, 20, "%d", value.intValue);
 			err = json_set_val_str(&jstr, "value", val_str);
 			require_noerr(err, exit);
 		}
-		else if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_FLOAT) {
+		else if (alisds_attr_db[handle].type == ALI_ATT_TYPE_FLOAT) {
 			err = alisds_attr_db[handle].read_func(&value);
 			require_noerr(err, exit);
 			snprintf(val_str, 20, "%.2f", value.floatValue);
 			err = json_set_val_str(&jstr, "value", val_str);
 			require_noerr(err, exit);
 		}
-		else if (alisds_attr_db[handle].att_type == ALI_ATT_TYPE_STRING) {
+		else if (alisds_attr_db[handle].type == ALI_ATT_TYPE_STRING) {
 			err = alisds_attr_db[handle].read_func(&value);
 			require_noerr(err, exit);
-			//if (strlen(value.stringValue)) {
-				err = json_set_val_str(&jstr, "value", value.stringValue);
-			//}
-			//else {
-			//	err = json_set_val_null(&jstr, "value");
-			//}
+			
+			err = json_set_val_str(&jstr, "value", value.stringValue);
 			require_noerr(err, exit);
 		}
 		err = json_pop_object(&jstr);
@@ -374,7 +400,7 @@ void alisds_indicate_local_atts(int attr_handles[], int num)
 	
 	/* Create attrset */
 	json_push_array_object(&jstr, "attrSet");
-	for (int i = 0; i < num && attr_handles[i] != ALI_HANDLE_NONE; i++) {
+	for (int i = 0; i < num && attr_handles[i] != ALISDS_INVALID_HANDLE; i++) {
 		handle = attr_handles[i];
 		err = json_set_array_str(&jstr, alisds_attr_db[handle].name);
 		require_noerr(err, exit);
@@ -385,17 +411,16 @@ void alisds_indicate_local_atts(int attr_handles[], int num)
 	require_noerr(err, exit);
 	
 	sds_log("Send to cloud %d bytes > %s", strlen(buff), buff);
-	err = emh_ali_set_cloud_atts(EMH_ARG_ALI_FORMAT_JSON, (uint8_t *)buff, strlen(buff));
+	err = emh_alisds_set_cloud_atts(EMH_ARG_ALISDS_FORMAT_JSON, (uint8_t *)buff, strlen(buff));
 	require_noerr(err, exit);
 	
 	for (i = 0; i < num; i++)
 	{
-		attr_handles[i] = ALI_HANDLE_NONE;
+		attr_handles[i] = ALISDS_INVALID_HANDLE;
 	}
 		
 exit:
-	return;	
-
+	return;
 }
 
 
@@ -404,42 +429,29 @@ void alisds_provision(void)
 	mx_status err = kNoErr;
 	char provision_ack[50];
 	
-	if (context.cloud_state == EMH_ARG_ALI_CONN_CONNECTED) {
+	if (context.cloud_state == EMH_ARG_ALISDS_CONN_CONNECTED) {
 		snprintf(provision_ack, 50, "{\"ErrorCode\":{\"value\":\"%d\"}}", 0);
-		err = emh_ali_set_cloud_atts(EMH_ARG_ALI_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
+		err = emh_alisds_set_cloud_atts(EMH_ARG_ALISDS_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
 		require_noerr(err, exit);
 		
 		snprintf(provision_ack, 50, "{\"ErrorCode\":{\"value\":\"%d\"}}", 1);
-		err = emh_ali_set_cloud_atts(EMH_ARG_ALI_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
+		err = emh_alisds_set_cloud_atts(EMH_ARG_ALISDS_FORMAT_JSON, (uint8_t *)provision_ack, strlen(provision_ack));
 		require_noerr(err, exit);
 		
 		sds_log("Send provision acknowledgment to alisds");
 	}
 	else {
 		context.delay_prov = true;
-	}
-	
-	#if 0
-	light_on = (light_on==true)? false:true;
-	
-	if (light_on == true) {
-		hsb2rgb_led_open(hue, saturation, bright);
-	}
-	else {
-		hsb2rgb_led_close();
-	}
-	
-	alisds_attr_indicate_by_handle(ALI_HANDLE_LIGHT_SWITCH);
-	#endif
+	}	
 
-	exit:
+exit:
 	return;
 }
 
 void alisds_restore(void)
 {
 	if (context.device_state == eState_M2_provision || context.device_state == eState_M3_normal) {
-		emh_ali_unbound();
+		emh_alisds_unbound();
 	}
 	
 	emh_module_restore_settings();

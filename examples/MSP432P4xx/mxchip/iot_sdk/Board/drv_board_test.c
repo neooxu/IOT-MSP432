@@ -4,11 +4,12 @@
 
 #include "driverlib.h"
 
-char sensor_display[3][OLED_DISPLAY_MAX_CHAR_PER_ROW + 1];
 
 void drv_board_test(void)
 {
 	int i = 0;
+	
+	char sensor_display[3][OLED_DISPLAY_MAX_CHAR_PER_ROW + 1];
 	
 	MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P4, GPIO_PIN6);
 	MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P5, GPIO_PIN4);
@@ -17,7 +18,7 @@ void drv_board_test(void)
 	if ( true == GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN6) ) return;
 
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_1, "Board Test");
-	emh_module_init();
+	emh_init();
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, emh_module_get_fw_version());
 	
 	/* Replace with your application code */

@@ -36,29 +36,29 @@ void SHT20_task(void);
 void switch_task(void);
 
 /* Attribute handlers */
-mx_status handle_read_cur_humidity		(ali_att_val *value);
-mx_status handle_read_cur_temperature	(ali_att_val *value);
+mx_status handle_read_cur_humidity		(alisds_att_val_t *value);
+mx_status handle_read_cur_temperature	(alisds_att_val_t *value);
 
-mx_status handle_read_cur_saturation	(ali_att_val *value);
-mx_status handle_read_cur_bright		(ali_att_val *value);
-mx_status handle_read_cur_hue			(ali_att_val *value);
-mx_status handle_read_cur_light_switch	(ali_att_val *value);
-mx_status handle_write_cur_saturation	(ali_att_val value);
-mx_status handle_write_cur_bright		(ali_att_val value);
-mx_status handle_write_cur_hue			(ali_att_val value);
-mx_status handle_write_cur_light_switch	(ali_att_val value);
+mx_status handle_read_cur_saturation	(alisds_att_val_t *value);
+mx_status handle_read_cur_bright		(alisds_att_val_t *value);
+mx_status handle_read_cur_hue			(alisds_att_val_t *value);
+mx_status handle_read_cur_light_switch	(alisds_att_val_t *value);
+mx_status handle_write_cur_saturation	(alisds_att_val_t value);
+mx_status handle_write_cur_bright		(alisds_att_val_t value);
+mx_status handle_write_cur_hue			(alisds_att_val_t value);
+mx_status handle_write_cur_light_switch	(alisds_att_val_t value);
 
-mx_status handle_read_cur_switch_1		(ali_att_val *value);
-mx_status handle_read_cur_switch_2		(ali_att_val *value);
+mx_status handle_read_cur_switch_1		(alisds_att_val_t *value);
+mx_status handle_read_cur_switch_2		(alisds_att_val_t *value);
 
-mx_status handle_read_console			(ali_att_val *value);
-mx_status handle_write_console			(ali_att_val value);
+mx_status handle_read_console			(alisds_att_val_t *value);
+mx_status handle_write_console			(alisds_att_val_t value);
 
 
 /* Attr write functions */
-mx_status handle_write_cur_saturation	(ali_att_val value);
-mx_status handle_write_cur_bright		(ali_att_val value);
-mx_status handle_write_cur_hue			(ali_att_val value);
+mx_status handle_write_cur_saturation	(alisds_att_val_t value);
+mx_status handle_write_cur_bright		(alisds_att_val_t value);
+mx_status handle_write_cur_hue			(alisds_att_val_t value);
 
 void OLED_ShowStatusString(const char *status_str);
 

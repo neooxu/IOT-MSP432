@@ -1,10 +1,40 @@
+/**
+ ******************************************************************************
+ * @file    mx_hal_serial.c
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   UART driver used for AT parser
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
+
 #include "mx_hal.h"
 #include "driverlib.h"
 
 #include "mx_utils/mx_ringbuffer.h"
 
-#define ATCOMMAND_RX_BUF_SIZE 1024
+#define MCU_DRVIER_RECV     1
 
+/******************************************************************************
+ *                              Variable Definitions
+ ******************************************************************************/
+ 
 static int _timeout = 100;
 
 const eUSCI_UART_Config at_uartConfig =
@@ -19,9 +49,20 @@ const eUSCI_UART_Config at_uartConfig =
         EUSCI_A_UART_MODE,                       // UART mode
         EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION  // Oversampling
 };
-uint8_t at_buffer[ATCOMMAND_RX_BUF_SIZE];
+
+
+uint8_t at_buffer[MX_SERIAL_RX_BUF_SIZE];
 struct ringbuffer at_rx;
+
+/******************************************************************************
+ *                             Function Declarations
+ ******************************************************************************/
+ 
 void ATCMD_RX_ISR(void);
+
+/******************************************************************************
+ *                              Function Definitions
+ ******************************************************************************/
 
 static int32_t at_async_read(uint8_t *const buf, const uint16_t length);
 
@@ -30,7 +71,9 @@ void mx_hal_serial_init(int timeout)
 {
 	_timeout = timeout;
 
-	ringbuffer_init(&at_rx, at_buffer, ATCOMMAND_RX_BUF_SIZE);
+#if MCU_DRVIER_RECV
+	ringbuffer_init(&at_rx, at_buffer, MX_SERIAL_RX_BUF_SIZE);
+#endif
 
 	/* Selecting P3.2 and P3.3 in UART mode */
 	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3,
@@ -51,10 +94,6 @@ void mx_hal_serial_set_timeout(int timeout)
 {
 	_timeout = timeout;	
 }
-
-
-
-
 
 int mx_hal_serial_putc(char c)
 {
@@ -102,6 +141,7 @@ void mx_hal_serial_flush(void)
 }
 
 /////////// Hardware spec functions //////////////
+#if MCU_DRVIER_RECV
 
 void ATCMD_RX_ISR(void)
 {
@@ -137,5 +177,4 @@ static int32_t at_async_read(uint8_t *const buf, const uint16_t length)
 	return (int32_t)was_read;
 }
 
-
-
+#endif

@@ -1,7 +1,38 @@
-
+/**
+ ******************************************************************************
+ * @file    ATCmdParser.c
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   EMW module AT command parser
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
 
 #include "ATCmdParser.h"
 #include "mx_hal.h"
+
+#include "mx_common.h"
+
+
+/******************************************************************************
+ *                                 Constants
+ ******************************************************************************/
 
 #ifdef LF
 #undef LF
@@ -17,6 +48,10 @@
 #define CR  13
 #endif
 
+/******************************************************************************
+ *                              Variable Definitions
+ ******************************************************************************/
+
 bool _dbg_on = false;
 static struct oob *_oobs;
 static char _buffer[AT_BUFFER_SIZE];
@@ -24,6 +59,10 @@ static const char *_output_delimiter;
 static int _output_delim_size;
 static const char *_input_delimiter;
 static int _input_delim_size;
+
+/******************************************************************************
+ *                              Function Definitions
+ ******************************************************************************/
 
 static inline void debug_if(int condition, const char *format, ...) {
 	if (condition) {

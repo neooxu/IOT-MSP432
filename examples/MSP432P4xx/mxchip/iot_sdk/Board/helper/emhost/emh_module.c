@@ -1,13 +1,49 @@
+/**
+ ******************************************************************************
+ * @file    emh_module.c
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   EMW module operation AT commands
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
 
 
 #include "ATCmdParser/ATCmdParser.h"
 #include "emh_api.h"
 
+/******************************************************************************
+ *                              Variable Definitions
+ ******************************************************************************/
+
 static char _fw_version[32];
 
-extern void emh_ali_event_handler(void);
+/******************************************************************************
+ *                             Function Declarations
+ ******************************************************************************/
+
+extern void emh_alisds_event_handler(void);
 extern void emh_wlan_event_handler(void);
 
+/******************************************************************************
+ *                              Function Definitions
+ ******************************************************************************/
 
 mx_status emh_module_reset(void)
 {
@@ -45,13 +81,13 @@ mx_status emh_module_restore_settings(void)
 	return kGeneralErr;
 }
 
-mx_status emh_module_init(void)
+mx_status emh_init(void)
 {
 	ATCmdParser_init("\r","\r\n", 1000, false);
 		
 	for (int i = 0; i < 2; i++) {
 		if ( kNoErr == emh_module_reset()) {
-			ATCmdParser_add_oob("+ALINKEVENT:",	emh_ali_event_handler);
+			ATCmdParser_add_oob("+ALINKEVENT:",	emh_alisds_event_handler);
 			ATCmdParser_add_oob("+WEVENT:",		emh_wlan_event_handler);
 			return kNoErr;
 		}
@@ -81,6 +117,6 @@ uint32_t emh_module_get_tick(void)
 	return tick;	
 }
 
-void emh_module_task(void) {
+void emh_runloop(void) {
 	while (ATCmdParser_process_oob());
 }
