@@ -8,14 +8,14 @@
 #include "driverlib.h"
 #include "io_button.h"
 
-const emh_ali_config_t alisds_config =
+const emh_alisds_config_t alisds_config =
 {
 	.product_info = {
 		.name      = "tideveloper-001",
-		.modle      = "TI_LIVING_AIRBOX_TIDEVELOPER_001",
+		.module      = "TI_LIVING_AIRBOX_TIDEVELOPER_001",
 		.key      = "0sB7jw6J4NA0HJGJfwrj",
 		.secret      = "r2jU6xdI8Itq7LqBzXI3HMvSPG8pJo35bXb1mcF9",
-		.format      = EMH_ARG_ALI_FORMAT_JSON,
+		.format      = EMH_ARG_ALISDS_FORMAT_JSON,
 	},
 	.dev_info = {
 		.type      = "AIRBOX",
@@ -92,7 +92,7 @@ int main(void)
 	while(1)
 	{
 		/* Application tick */
-		alisds_loop();
+		alisds_runloop();
 		SHT20_task();
 		switch_task();
 		button_srv(&usr_btn);

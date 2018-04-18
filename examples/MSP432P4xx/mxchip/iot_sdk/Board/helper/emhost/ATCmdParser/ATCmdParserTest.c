@@ -12,7 +12,7 @@ void ATCmdParser_test(void)
 	
 	mx_hal_ms_ticker_init();
 	
-	ret = emh_module_init();
+	ret = emh_init();
 	if (ret == kNoErr) printf("module init success\r\n");
 	
 	printf("FW version: %s\r\n", emh_module_get_fw_version());

@@ -8,9 +8,9 @@
 
 mx_status console_task_init(void)
 {
-	ali_dev_attr_t attr;
+	alisds_attr_t attr;
 	attr.name = "DebVal";
-	attr.att_type = ALI_ATT_TYPE_STRING;
+	attr.type = ALI_ATT_TYPE_STRING;
 	attr.read_func = handle_read_console;
 	attr.write_func = handle_write_console;
 	alisds_attr_init(ALI_HANDLE_CONSOLE, attr);
@@ -57,7 +57,7 @@ void console_task(void)
 
 
 
-char console_buff[SDS_ATTR_VAL_MAX_LEN]="hello, world!";
+char console_buff[ALISDS_ATTR_VAL_MAX_LEN]="hello, world!";
 const char oled_clear_line[OLED_DISPLAY_MAX_CHAR_PER_ROW]="                ";
 
 void OLED_ShowStatusString(const char *status_str)
@@ -67,22 +67,22 @@ void OLED_ShowStatusString(const char *status_str)
 }
 
 
-mx_status handle_read_console (ali_att_val *value)
+mx_status handle_read_console (alisds_att_val_t *value)
 {
 	(*value).stringValue = console_buff;
 	return kNoErr;
 }
 
-mx_status handle_write_console(ali_att_val value)
+mx_status handle_write_console(alisds_att_val_t value)
 {
 	app_log("recv %s", value.stringValue);
-	strncpy(console_buff, value.stringValue, SDS_ATTR_VAL_MAX_LEN);
+	strncpy(console_buff, value.stringValue, ALISDS_ATTR_VAL_MAX_LEN);
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, (char *)oled_clear_line);
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, (char *)console_buff);
 	return kNoErr;
 }
 
-void alisds_event_handler(alisds_event_e event)
+void alisds_event_handler(alisds_event_t event)
 {
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_4, (char *)oled_clear_line);
 	switch (event) {

@@ -18,7 +18,7 @@ char sensor_display[2][OLED_DISPLAY_MAX_CHAR_PER_ROW + 1];
 
 mx_status SHT20_task_init(void)
 {
-	ali_dev_attr_t attr;
+	alisds_attr_t attr;
 	temperature = SHT2x_GetTempPoll();
 	humidity = SHT2x_GetHumiPoll();
 
@@ -29,13 +29,13 @@ mx_status SHT20_task_init(void)
 	OLED_ShowString(OLED_DISPLAY_COLUMN_START, OLED_DISPLAY_ROW_3, sensor_display[1]);
 	
 	attr.name = "CurrentTemperature_1";
-	attr.att_type = ALI_ATT_TYPE_FLOAT;
+	attr.type = ALI_ATT_TYPE_FLOAT;
 	attr.read_func = handle_read_cur_temperature;
 	attr.write_func = NULL;
 	alisds_attr_init(ALI_HANDLE_CURRENT_TEMPERATURE, attr);
 
 	attr.name = "CurrentHumidity";
-	attr.att_type = ALI_ATT_TYPE_FLOAT;
+	attr.type = ALI_ATT_TYPE_FLOAT;
 	attr.read_func = handle_read_cur_humidity;
 	attr.write_func = NULL;
 	alisds_attr_init(ALI_HANDLE_CURRENT_HUMIDITY, attr);
@@ -62,14 +62,14 @@ void SHT20_task(void)
 }
 
 
-mx_status handle_read_cur_humidity(ali_att_val *value)
+mx_status handle_read_cur_humidity(alisds_att_val_t *value)
 {
 	(*value).floatValue = humidity;
 	return kNoErr;
 }
 
 
-mx_status handle_read_cur_temperature(ali_att_val *value)
+mx_status handle_read_cur_temperature(alisds_att_val_t *value)
 {
 	(*value).floatValue = temperature;
 	return kNoErr;

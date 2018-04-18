@@ -1,49 +1,74 @@
+/**
+ ******************************************************************************
+ * @file    sht2x.h
+ * @author  William Xu
+ * @version V1.0.0
+ * @date    9-Apr-2018
+ * @brief   SHT2x sensor driver api header file
+ ******************************************************************************
+ *
+ * Copyright (c) 2009-2018 MXCHIP Co.,Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
+
+
 #ifndef __SHT2x_H__
 #define __SHT2x_H__
-
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-#define  I2C_ADDR_W 0x40
-#define  I2C_ADDR_R 0x40
+/** \addtogroup drivers */
+/** @{*/
 
-typedef enum {
-    TRIG_TEMP_MEASUREMENT_HM   = 0xE3,
-    TRIG_HUMI_MEASUREMENT_HM   = 0xE5,
-    TRIG_TEMP_MEASUREMENT_POLL = 0xF3,
-    TRIG_HUMI_MEASUREMENT_POLL = 0xF5,
-    USER_REG_W                 = 0xE6,
-    USER_REG_R                 = 0xE7,
-    SOFT_RESET                 = 0xFE
-} SHT2xCommand;
+/** \addtogroup SHT2x */
+/** @{*/
 
-typedef enum {
-    SHT2x_RES_12_14BIT         = 0x00,
-    SHT2x_RES_8_12BIT          = 0x01,
-    SHT2x_RES_10_13BIT         = 0x80,
-    SHT2x_RES_11_11BIT         = 0x81,
-    SHT2x_RES_MASK             = 0x81
-} SHT2xResolution;
 
-typedef enum {
-    SHT2x_HEATER_ON            = 0x04,
-    SHT2x_HEATER_OFF           = 0x00,
-    SHT2x_HEATER_MASK          = 0x04
-} SHT2xHeater;
-
-typedef struct{
-    float TEMP_POLL;
-    float HUMI_POLL;    
-} SHT2x_data;
-
-extern SHT2x_data SHT20;
-
+/**
+ * @brief   Initialize I2C bus and SHT2x
+ *
+ * @return  none
+ */ 
 uint8_t SHT2x_Init(void); 
+
+/**
+ * @brief   Procedure a software reset
+ *
+ * @return  none
+ */ 
 uint8_t SHT2x_SoftReset(void);
+
+/**
+ * @brief   Read temperature data form SHT2x, this operation require some time
+ *
+ * @return  none
+ */ 
 float SHT2x_GetTempPoll(void);
+
+/**
+ * @brief   Read humidity data form SHT2x, this operation require some time
+ *
+ * @return  none
+ */
 float SHT2x_GetHumiPoll(void);
+
+/** @}*/
+/** @}*/
 
 #ifdef __cplusplus
 }

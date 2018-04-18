@@ -32,7 +32,7 @@
 							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.exe.builderDebug.851675632" keepEnvironmentInBuildfile="false" name="GNU Make" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.exe.builderDebug"/>
 							<tool id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.exe.compilerDebug.1908244281" name="MSP432 Compiler" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.exe.compilerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.DEBUGGING_MODEL.605467840" name="Debugging model" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.DEBUGGING_MODEL" value="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.DEBUGGING_MODEL.SYMDEBUG__DWARF" valueType="enumerated"/>
-								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.ADVICE__POWER.1241475179" name="Enable checking of ULP power rules (--advice:power)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.ADVICE__POWER" value="all" valueType="string"/>
+								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.ADVICE__POWER.1241475179" name="Enable checking of ULP power rules (--advice:power)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.ADVICE__POWER" value="" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.DIAG_WARNING.2076713339" name="Treat diagnostic &lt;id&gt; as warning (--diag_warning, -pdsw)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.DIAG_WARNING" valueType="stringList">
 									<listOptionValue builtIn="false" value="225"/>
 								</option>
@@ -65,6 +65,7 @@
 									<listOptionValue builtIn="false" value="__MSP432P401R__"/>
 									<listOptionValue builtIn="false" value="TARGET_IS_MSP432P4XX"/>
 									<listOptionValue builtIn="false" value="ccs"/>
+									<listOptionValue builtIn="false" value="MX_DEBUG"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.GCC.179647785" name="Enable support for GCC extensions (DEPRECATED) (--gcc)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.GCC" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.C_DIALECT.1196158666" name="C Dialect" superClass="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.C_DIALECT" value="com.ti.ccstudio.buildDefinitions.MSP432_15.12.compilerID.C_DIALECT.C99" valueType="enumerated"/>
