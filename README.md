@@ -18,7 +18,7 @@
     * [3.5 配置工程](#35-配置工程)
     * [3.6 编译工程](#36-编译工程)
     * [3.7 下载与调试](#37-下载与调试)
-* [4. IoT示例使用流程](#4-iot示例使用流程)
+* [4. IoT示例使用](#4-iot示例使用)
      * [4.1 准备工作](#41-准备工作)
      * [4.2 启动配网](#42-启动配网)
      * [4.3 控制设备](#43-控制设备)
@@ -55,16 +55,16 @@
 
 
 ### 2.2 获取SDK
-请点击进入 [AliOS Things SDK 仓库](https://github.com/neooxu/AliOS-Things.git)，默认分支：dev_msp432 ，您可以：
+请点击进入 [AliOS Things SDK 仓库](https://github.com/neooxu/AliOS-Things/tree/dev_msp432)，默认分支：dev_msp432 ，您可以：
 
-* 如已安装 Git 软件，使用 git 命令克隆到 PC 本地：git clonehttps://github.com/neooxu/AliOS-Things.git
-* 如未安装 Git 软件，可确认当前在 dev_msp432 分之后，直接下载压缩包文件 PC 本地，点击仓库文件列表右上方， “Download ZIP",下载到本地后解压缩即可。
+* 如已安装 Git 软件，使用 git 命令克隆到 PC 本地：`git clone https://github.com/neooxu/AliOS-Things.git`
+* 如未安装 Git 软件，可确认当前在 `dev_msp432` 分之后，直接下载压缩包文件 PC 本地，点击仓库文件列表右上方， “Download ZIP",下载到本地后解压缩即可。
 
 
 
 ### 2.3 导入工程
 
-打开CCS IDE,选择 “Project”-->"Import CCS Project"-->"Browse",找到相应的alios-things 目录位置，如： " F:\Git\AliOS-Things\platform\mcu\msp432\IOT-MSP432\examples\MSP432P4xx\mxchip\iot_sdk "。请记得不要勾选 “Copy projects into workspace”。
+打开CCS IDE,选择 “Project”-->"Import CCS Project"-->"Browse",找到相应的alios-things 目录位置，如： `F:\Git\AliOS-Things\platform\mcu\msp432\IOT-MSP432\examples\MSP432P4xx\mxchip\iot_sdk`。请记得一定不要勾选 “Copy projects into workspace”。
 
 ![选择路径](https://github.com/neooxu/IOT-MSP432/blob/master/image/choose_project.png)
 
@@ -104,7 +104,7 @@
 
 ![CCS下载](https://github.com/neooxu/IOT-MSP432/blob/master/image/alios_debug.png) 
 
-
+至此，基于Alios-Things SDK的 IOT 示例源代码已编译下载 TI 开发板 中。
 
 
 
@@ -222,7 +222,7 @@ C Dialect"一栏， 请选择 “Complile program in C99 mode.(--c99)”,如下�
 ![退出调试](https://github.com/neooxu/IOT-MSP432/blob/master/image/quit_debug.png) 
 
 
-## 4. IoT示例使用流程
+## 4. IoT示例使用
 
 本示例工程提供一个典型的 IoT 应用示例。 系统结构组成如下图：
 
@@ -233,9 +233,9 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 使用具体步骤如下：
 
 
-### 准备工作
+### 4.1 准备工作
 
-**—— 手机 APP 端**
+### 4.1.1 手机 APP 端
 
 1.下载安装APP: 点击 [示例 APP 下载页面](https://www.pgyer.com/TIAnd)，或扫描下方二维码，请根据手机系统类型选择下载。
 
@@ -250,14 +250,14 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 
 
-**—— 开发板设备端**
+### 4.1.2 开发板设备端
 
 1. 请使用 microUSB 连接线为开发板供电，并确认红色电源灯常亮，保证供电正常。
 
 ![设备供电](https://github.com/neooxu/IOT-MSP432/blob/master/image/device_power_on.png) 
 
 
-### 启动配网
+### 4.2 启动配网
 打开手机 APP, 点击右上角 “+” 号，选择设备 “TI开发板”，根据提示进行操作。
 
 1. 长按开发板上盖板的 USER 按键，恢复设备出厂设置，此时开发板 OLED 屏最后一行将打印显示："Restore default",继而跳变至 “Wi-Fi config....” 等待手机配网中；
@@ -274,7 +274,7 @@ TI 的 MSP432P401R 单片机， 通过串口连接 EMW3080 Wi-Fi 模块，并与
 
 
 
-### 控制设备
+### 4.3 控制设备
 进入设备控制页面，可对各外部设备参数进行监测或控制，或在线调试。
 
 1. 监测：
